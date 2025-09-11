@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags - UPDATED -->
+    <title>Prompt Minds - Custom Web Design & AI Solutions in India</title>
+    <meta name="description" content="Prompt Minds (promptminds.in) offers professional web design, development, and AI-powered solutions. We build high-performance websites with a focus on SEO, custom tools, and brand growth for businesses in India and beyond.">
+    <meta name="keywords" content="web design India, website development India, AI solutions, SEO services, custom website, prompt minds, Abhinav Kumar, professional website, small business website, promptminds.in">
+    <meta name="author" content="Prompt Minds">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://promptminds.in">
+
+    <!-- Open Graph / Facebook Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://promptminds.in/">
+    <meta property="og:title" content="Prompt Minds - Custom Web Design & AI Solutions in India">
+    <meta property="og:description" content="We build high-performance websites with a focus on SEO, custom tools, and brand growth.">
+    <meta property="og:image" content="https://i.ibb.co/LXNcssHF/1000039909-removebg_preview.png">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://promptminds.in/">
+    <meta property="twitter:title" content="Prompt Minds - Custom Web Design & AI Solutions in India">
+    <meta property="twitter:description" content="We build high-performance websites with a focus on SEO, custom tools, and brand growth.">
+    <meta property="twitter:image" content="https://i.ibb.co/LXNcssHF/1000039909-removebg_preview.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- External libraries for functionality -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.birds.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- ===> LINK TO YOUR CSS FILE <=== -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Structured Data (Schema Markup for SEO) - FULLY OPTIMIZED -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "Prompt Minds",
+      "image": "https://i.ibb.co/LXNcssHF/1000039909-removebg_preview.png",
+      "@id": "https://promptminds.in",
+      "url": "https://promptminds.in",
+      "telephone": "+91-0000000000",
+      "description": "Prompt Minds offers professional web design, development, and AI-powered solutions. We build high-performance websites with a focus on SEO, custom tools, and brand growth for businesses in India and beyond.",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Digital Office",
+        "addressLocality": "Patna",
+        "addressRegion": "Bihar",
+        "postalCode": "800001",
+        "addressCountry": "IN"
+      },
+      "founder": {
+        "@type": "Person",
+        "name": "Abhinav Kumar"
+      },
+      "sameAs": [
+        "https://www.facebook.com/",
+        "https://www.twitter.com/",
+        "https://www.instagram.com/",
+        "https://www.linkedin.com/"
+      ],
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ],
+        "opens": "00:00",
+        "closes": "23:59"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "bestRating": "5",
+        "ratingCount": "85"
+      }
+    }
+    </script>
+</head>
+<body>
+
+    <!-- NEW: Custom Cursor HTML -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <div id="welcome-screen">
+        <canvas id="welcome-canvas"></canvas>
+        <div class="welcome-content">
+            <img src="https://i.ibb.co/LXNcssHF/1000039909-removebg_preview.png" alt="Prompt Minds Logo" class="welcome-logo" onerror="this.onerror=null;this.src='https://placehold.co/150x150/0a0a14/E0E0E0?text=PM';">
+            <h1 class="welcome-title"><span class="lang-en">Welcome to Prompt Minds</span><span class="lang-hi" style="display:none;">प्रॉम्प्ट माइंड्स में आपका स्वागत है</span></h1>
+            <p class="welcome-subtitle"><span class="lang-en">Crafting Your Digital Future</span><span class="lang-hi" style="display:none;">आपके डिजिटल भविष्य का निर्माण</span></p>
+            <button id="get-started-btn" class="btn"><i class="fas fa-play"></i> <span class="lang-en">Get Started & Listen</span><span class="lang-hi" style="display:none;">शुरू करें और सुनें</span></button>
+        </div>
+    </div>
+
+    <div id="dynamic-background"></div>
+
+    <header>
+        <div class="container header-container">
+            <a href="#home" class="logo-container">
+                <img src="https://i.ibb.co/LXNcssHF/1000039909-removebg_preview.png" alt="Prompt Minds Logo" class="logo-img" onerror="this.onerror=null;this.src='https://placehold.co/45x45/1A1A2E/E0E0E0?text=PM';">
+                <span class="logo-text">Prompt Minds</span>
+            </a>
+            <button class="mobile-menu-toggle" id="mobile-menu-btn" aria-label="Toggle navigation menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="header-right">
+                <nav>
+                    <ul>
+                        <li><a href="#home"><span class="lang-en">Home</span><span class="lang-hi" style="display:none;">होम</span></a></li>
+                        <li><a href="#about"><span class="lang-en">About</span><span class="lang-hi" style="display:none;">हमारे बारे में</span></a></li>
+                        <li><a href="#contact"><span class="lang-en">Contact</span><span class="lang-hi" style="display:none;">संपर्क</span></a></li>
+                        <li class="dropdown">
+                            <button>
+                                <span class="lang-en">Explore</span><span class="lang-hi" style="display:none;">और देखें</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#benefits"><span class="lang-en">Benefits</span><span class="lang-hi" style="display:none;">फायदे</span></a></li>
+                                <li><a href="#stats"><span class="lang-en">Statistics</span><span class="lang-hi" style="display:none;">आँकड़े</span></a></li>
+                                <li><a href="#agreement"><span class="lang-en">Agreement</span><span class="lang-hi" style="display:none;">समझौता</span></a></li>
+                            </ul>
+                        </li>
+                        <li><button id="open-client-modal-btn" class="header-btn"><span class="lang-en">Client Portal</span><span class="lang-hi" style="display:none;">क्लाइंट पोर्टल</span></button></li>
+                    </ul>
+                </nav>
+                <div class="lang-switcher">
+                    <button data-lang="en" class="lang-btn active">EN</button>
+                    <button data-lang="hi" class="lang-btn">HI</button>
+                </div>
+                <button id="stop-voice-btn" class="header-btn" style="display: none; background-color: var(--color-danger);"><i class="fas fa-stop"></i></button>
+                <button id="theme-switcher" aria-label="Toggle theme"><i class="fa-solid fa-moon"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="hero-section container">
+            <div class="hero-image" data-aos="fade-right">
+                <div class="image-frame">
+                    <img src="https://i.ibb.co/LXNcssHF/1000039909-removebg_preview.png" alt="Abhinav Kumar - Founder of Prompt Minds" onerror="this.onerror=null;this.src='https://placehold.co/350x350/121220/E0E0E0?text=Logo';">
+                </div>
+            </div>
+            <div class="hero-content">
+                <h1 class="hero-headline">
+                    <span id="typewriter-text"></span><span class="typewriter-cursor">|</span>
+                </h1>
+                <p class="hero-subheadline">
+                    <span class="lang-en">We design and develop high-performance websites that drive growth, engagement, and success for your brand.</span>
+                    <span class="lang-hi" style="display:none;">हम आपके ब्रांड के लिए विकास, सहभागिता और सफलता लाने वाली उच्च-प्रदर्शन वाली वेबसाइटों को डिजाइन और विकसित करते हैं।</span>
+                </p>
+                <a href="#contact" class="btn">
+                    <span class="lang-en">Get a Free Consultation</span>
+                    <span class="lang-hi" style="display:none;">मुफ्त परामर्श प्राप्त करें</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- ABOUT SECTION UPDATED TO INFO CARDS -->
+        <section id="about">
+            <div class="container">
+                <h2 class="section-title" data-aos="zoom-in"><span class="lang-en">Discover More About Us</span><span class="lang-hi" style="display:none;">हमारे बारे में और जानें</span></h2>
+                <p class="section-subtitle" data-aos="zoom-in" data-aos-delay="100">
+                    <span class="lang-en">Learn about our mission, policies, and the terms that govern our services.</span>
+                    <span class="lang-hi" style="display:none;">हमारे मिशन, नीतियों और हमारी सेवाओं को नियंत्रित करने वाली शर्तों के बारे में जानें।</span>
+                </p>
+                <div class="card-grid">
+                    <!-- About Us Card -->
+                    <div class="flip-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <div class="icon"><i class="fas fa-building"></i></div>
+                                <h3><span class="lang-en">About Us</span><span class="lang-hi" style="display:none;">हमारे बारे में</span></h3>
+                                <p><span class="lang-en">Our mission, vision, and the team behind our success.</span><span class="lang-hi" style="display:none;">हमारा मिशन, विजन, और हमारी सफलता के पीछे की टीम।</span></p>
+                            </div>
+                            <div class="card-back">
+                                <h3><span class="lang-en">Our Story</span><span class="lang-hi" style="display:none;">हमारी कहानी</span></h3>
+                                <p><span class="lang-en">Discover the core values and engineering excellence that drive Prompt Minds.</span><span class="lang-hi" style="display:none;">प्रॉम्प्ट माइंड्स को चलाने वाले मूल मूल्यों और इंजीनियरिंग उत्कृष्टता की खोज करें।</span></p>
+                                <button class="btn info-btn" data-page="about" style="margin-top: 15px; padding: 10px 20px; font-size: 0.9rem;"><span class="lang-en">Read More</span><span class="lang-hi" style="display:none;">और पढ़ें</span></button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Privacy Policy Card -->
+                    <div class="flip-card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <div class="icon"><i class="fas fa-shield-alt"></i></div>
+                                <h3><span class="lang-en">Privacy Policy</span><span class="lang-hi" style="display:none;">गोपनीयता नीति</span></h3>
+                                <p><span class="lang-en">How we collect, use, and protect your personal data.</span><span class="lang-hi" style="display:none;">हम आपके व्यक्तिगत डेटा को कैसे एकत्र, उपयोग और संरक्षित करते हैं।</span></p>
+                            </div>
+                             <div class="card-back">
+                                <h3><span class="lang-en">Your Data, Your Trust</span><span class="lang-hi" style="display:none;">आपका डेटा, आपका विश्वास</span></h3>
+                                <p><span class="lang-en">We are committed to protecting your privacy. Read our full policy.</span><span class="lang-hi" style="display:none;">हम आपकी गोपनीयता की रक्षा के लिए प्रतिबद्ध हैं। हमारी पूरी नीति पढ़ें।</span></p>
+                                <button class="btn info-btn" data-page="privacy" style="margin-top: 15px; padding: 10px 20px; font-size: 0.9rem;"><span class="lang-en">Read More</span><span class="lang-hi" style="display:none;">और पढ़ें</span></button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Terms of Service Card -->
+                    <div class="flip-card" data-aos="fade-up" data-aos-delay="400">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <div class="icon"><i class="fas fa-file-contract"></i></div>
+                                <h3><span class="lang-en">Terms of Service</span><span class="lang-hi" style="display:none;">सेवा की शर्तें</span></h3>
+                                <p><span class="lang-en">The rules and guidelines for using our website and services.</span><span class="lang-hi" style="display:none;">हमारी वेबसाइट और सेवाओं का उपयोग करने के नियम और दिशानिर्देश।</span></p>
+                            </div>
+                            <div class="card-back">
+                                <h3><span class="lang-en">Legal Agreement</span><span class="lang-hi" style="display:none;">कानूनी समझौता</span></h3>
+                                <p><span class="lang-en">Understand your rights and responsibilities when you partner with us.</span><span class="lang-hi" style="display:none;">जब आप हमारे साथ साझेदारी करते हैं तो अपने अधिकारों और जिम्मेदारियों को समझें।</span></p>
+                                <button class="btn info-btn" data-page="terms" style="margin-top: 15px; padding: 10px 20px; font-size: 0.9rem;"><span class="lang-en">Read More</span><span class="lang-hi" style="display:none;">और पढ़ें</span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- WHAT YOU'LL GET SECTION (NEW) -->
+        <section id="features">
+            <div class="container">
+                <h2 class="section-title" data-aos="zoom-in">
+                    <span class="lang-en">What You’ll Get (All-in-One Package)</span>
+                    <span class="lang-hi" style="display:none;">आपको क्या मिलेगा (ऑल-इन-वन पैकेज)</span>
+                </h2>
+                <p class="section-subtitle" data-aos="zoom-in" data-aos-delay="100">
+                    <span class="lang-en">A comprehensive suite of services designed to launch your professional online presence and start your earning journey.</span>
+                    <span class="lang-hi" style="display:none;">आपकी पेशेवर ऑनलाइन उपस्थिति शुरू करने और आपकी कमाई की यात्रा शुरू करने के लिए डिज़ाइन की गई सेवाओं का एक व्यापक सूट।</span>
+                </p>
+                <div class="card-grid">
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="icon"><i class="fas fa-globe"></i></div>
+                        <h3><span class="lang-en">Free Premium .com Domain</span><span class="lang-hi" style="display:none;">फ्री प्रीमियम .com डोमेन</span></h3>
+                        <p><span class="lang-en">Your brand's identity.</span><span class="lang-hi" style="display:none;">आपके ब्रांड की पहचान।</span></p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="icon"><i class="fas fa-drafting-compass"></i></div>
+                        <h3><span class="lang-en">Complete Website Creation</span><span class="lang-hi" style="display:none;">पूरी वेबसाइट का निर्माण</span></h3>
+                        <p><span class="lang-en">Every tool and page, built with perfection.</span><span class="lang-hi" style="display:none;">हर टूल और पेज, परफेक्शन के साथ।</span></p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                        <div class="icon"><i class="fas fa-magic"></i></div>
+                        <h3><span class="lang-en">Premium Animations & Graphics</span><span class="lang-hi" style="display:none;">प्रीमियम एनिमेशन और ग्राफिक्स</span></h3>
+                        <p><span class="lang-en">To captivate your visitors.</span><span class="lang-hi" style="display:none;">विज़िटर्स को बांधने के लिए।</span></p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="icon"><i class="fas fa-chart-line"></i></div>
+                        <h3><span class="lang-en">Full SEO Setup</span><span class="lang-hi" style="display:none;">पूर्ण SEO सेटअप</span></h3>
+                        <p><span class="lang-en">On-Page, Off-Page, Internal & External SEO.</span><span class="lang-hi" style="display:none;">ऑन-पेज, ऑफ-पेज, इंटरनल और एक्सटर्नल SEO।</span></p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="icon"><i class="fas fa-gem"></i></div>
+                        <h3><span class="lang-en">Professional Logo & Branding</span><span class="lang-hi" style="display:none;">पेशेवर लोगो और ब्रांडिंग</span></h3>
+                        <p><span class="lang-en">For a unique look and feel.</span><span class="lang-hi" style="display:none;">यूनिक लुक और फील के लिए।</span></p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                        <div class="icon"><i class="fas fa-search"></i></div>
+                        <h3><span class="lang-en">Google Search Console Setup</span><span class="lang-hi" style="display:none;">गूगल सर्च कंसोल सेटअप</span></h3>
+                        <p><span class="lang-en">To get your site indexed and found.</span><span class="lang-hi" style="display:none;">साइट को सर्च में लाने के लिए।</span></p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="icon"><i class="fas fa-shield-alt"></i></div>
+                        <h3><span class="lang-en">Privacy Policy + SSL Certificate</span><span class="lang-hi" style="display:none;">गोपनीयता नीति + SSL प्रमाणपत्र</span></h3>
+                        <p><span class="lang-en">For 100% Trust and Security.</span><span class="lang-hi" style="display:none;">100% विश्वास और सुरक्षा के लिए।</span></p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="icon"><i class="fas fa-dollar-sign"></i></div>
+                        <h3><span class="lang-en">Ads Network Approval Help</span><span class="lang-hi" style="display:none;">विज्ञापन नेटवर्क अनुमोदन सहायता</span></h3>
+                        <p><span class="lang-en">The first step to start earning.</span><span class="lang-hi" style="display:none;">कमाई शुरू करने का पहला कदम।</span></p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                        <div class="icon"><i class="fas fa-lightbulb"></i></div>
+                        <h3><span class="lang-en">Earning Strategy & Guidance</span><span class="lang-hi" style="display:none;">कमाई की रणनीति और मार्गदर्शन</span></h3>
+                        <p><span class="lang-en">Secrets to high income from ads.</span><span class="lang-hi" style="display:none;">विज्ञापनों से उच्च आय के रहस्य।</span></p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="icon"><i class="fas fa-users"></i></div>
+                        <h3><span class="lang-en">Guaranteed 500+ Visitors</span><span class="lang-hi" style="display:none;">500+ विज़िटर्स की गारंटी</span></h3>
+                        <p><span class="lang-en">No full payment until this target is met.</span><span class="lang-hi" style="display:none;">जब तक यह लक्ष्य पूरा नहीं होता, तब तक पूरा भुगतान नहीं।</span></p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="icon"><i class="fas fa-rocket"></i></div>
+                        <h3><span class="lang-en">2 Months Ranking Support</span><span class="lang-hi" style="display:none;">2 महीने की रैंकिंग सहायता</span></h3>
+                        <p><span class="lang-en">To push your site to the top of Google.</span><span class="lang-hi" style="display:none;">आपकी साइट को गूगल के टॉप पर लाने के लिए।</span></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <div class="container">
+                <h2 class="section-title" data-aos="zoom-in"><span class="lang-en">Let's Build Your Website</span><span class="lang-hi" style="display:none;">आइए आपकी वेबसाइट बनाएं</span></h2>
+                <p class="section-subtitle" data-aos="zoom-in" data-aos-delay="100">
+                    <span class="lang-en">If you want a high-quality website, share your details in the form below. The founder of Prompt Minds, Abhinav Kumar, will contact you directly for a call.</span>
+                    <span class="lang-hi" style="display:none;">अगर आप एक हाई-क्वालिटी वेबसाइट बनवाना चाहते हैं, तो नीचे दिए गए फॉर्म में अपनी डिटेल्स शेयर करें। प्रॉम्प्ट माइंड्स के फाउंडर, अभिनव कुमार, आपसे डायरेक्ट कॉल पर बात करेंगे।</span>
+                </p>
+                <form id="contact-form" class="form-container" data-aos="fade-up" data-aos-delay="200">
+                    <div id="contact-form-message-area"></div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="contact-name"><span class="lang-en">Your Name</span><span class="lang-hi" style="display:none;">आपका नाम</span></label>
+                            <div class="input-wrapper">
+                                <input type="text" id="contact-name" name="name" required>
+                                <i class="fas fa-user input-icon"></i>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-email"><span class="lang-en">Your Email</span><span class="lang-hi" style="display:none;">आपका ईमेल</span></label>
+                            <div class="input-wrapper">
+                                <input type="email" id="contact-email" name="email" required>
+                                <i class="fas fa-envelope input-icon"></i>
+                            </div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="contact-phone"><span class="lang-en">Phone Number</span><span class="lang-hi" style="display:none;">फ़ोन नंबर</span></label>
+                            <div class="input-wrapper">
+                                <input type="tel" id="contact-phone" name="phone" required>
+                                <i class="fas fa-phone input-icon"></i>
+                            </div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="contact-details"><span class="lang-en">Tell us about your project</span><span class="lang-hi" style="display:none;">हमें अपने प्रोजेक्ट के बारे में बताएं</span></label>
+                            <textarea id="contact-details" name="project_details" rows="5" required></textarea>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn" style="width: 100%;"><span class="lang-en">Send Details</span><span class="lang-hi" style="display:none;">विवरण भेजें</span></button>
+                </form>
+            </div>
+        </section>
+
+        <!-- UPGRADED 3D TESTIMONIALS SECTION -->
+        <section id="testimonials">
+            <div class="container">
+                <h2 class="section-title" data-aos="zoom-in"><span class="lang-en">What Our Clients Say</span><span class="lang-hi" style="display:none;">हमारे क्लाइंट क्या कहते हैं</span></h2>
+                
+                <div class="testimonial-slider-container" data-aos="fade-up" data-aos-delay="200">
+                    <div class="testimonial-slider">
+                        <!-- Reviews will be dynamically inserted here -->
+                    </div>
+                    <div class="slider-nav">
+                        <button id="prev-testimonial" aria-label="Previous testimonial">&#10094;</button>
+                        <button id="next-testimonial" aria-label="Next testimonial">&#10095;</button>
+                    </div>
+                </div>
+                <div class="slider-dots" id="testimonial-dots"></div>
+                
+                <div class="review-form-onpage" data-aos="fade-up">
+                    <h3 class="section-title" style="font-size: 1.8rem; margin-bottom: 30px;">
+                        <span class="lang-en">Leave a Review</span>
+                        <span class="lang-hi" style="display:none;">एक समीक्षा छोड़ें</span>
+                    </h3>
+                    <form id="review-form-page" class="form-container">
+                        <div id="review-message-area"></div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="review-name-page"><span class="lang-en">Your Name</span><span class="lang-hi" style="display:none;">आपका नाम</span></label>
+                                <div class="input-wrapper">
+                                    <input type="text" id="review-name-page" required>
+                                    <i class="fas fa-user input-icon"></i>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="review-location-page"><span class="lang-en">City, State</span><span class="lang-hi" style="display:none;">शहर, राज्य</span></label>
+                                <div class="input-wrapper">
+                                    <input type="text" id="review-location-page" required>
+                                    <i class="fas fa-map-marker-alt input-icon"></i>
+                                </div>
+                            </div>
+                            <div class="form-group full-width">
+                                <label><span class="lang-en">Your Rating</span><span class="lang-hi" style="display:none;">आपकी रेटिंग</span></label>
+                                <div class="star-rating" id="review-stars-page">
+                                    <i class="fas fa-star" data-value="1"></i>
+                                    <i class="fas fa-star" data-value="2"></i>
+                                    <i class="fas fa-star" data-value="3"></i>
+                                    <i class="fas fa-star" data-value="4"></i>
+                                    <i class="fas fa-star" data-value="5"></i>
+                                </div>
+                                <input type="hidden" id="review-rating-page" value="0" required>
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="review-text-page"><span class="lang-en">Your Review</span><span class="lang-hi" style="display:none;">आपकी समीक्षा</span></label>
+                                <textarea id="review-text-page" rows="4" required></textarea>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn"><span class="lang-en">Submit Review</span><span class="lang-hi" style="display:none;">समीक्षा सबमिट करें</span></button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <section id="benefits">
+            <div class="container">
+                <h2 class="section-title" data-aos="zoom-in">
+                    <span class="lang-en">Your Website, Your Advantage</span>
+                    <span class="lang-hi" style="display:none;">आपकी वेबसाइट, आपका फायदा</span>
+                </h2>
+                <p class="section-subtitle" data-aos="zoom-in" data-aos-delay="100">
+                    <span class="lang-en">A professional website is more than an online address; it's a powerful tool to grow your business. Here's how:</span>
+                    <span class="lang-hi" style="display:none;">एक प्रोफेशनल वेबसाइट सिर्फ एक ऑनलाइन पता नहीं है, बल्कि आपके व्यवसाय को बढ़ाने का एक शक्तिशाली उपकरण है। देखें कैसे:</span>
+                </p>
+                <div class="card-grid">
+                    <div class="flip-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <div class="icon"><i class="fas fa-users"></i></div>
+                                <h3><span class="lang-en">Wider Customer Reach</span><span class="lang-hi" style="display:none;">ज़्यादा कस्टमर तक पहुंच</span></h3>
+                                <p><span class="lang-en">Your website works 24/7, helping new customers find you easily.</span><span class="lang-hi" style="display:none;">आपकी वेबसाइट 24/7 काम करती है, जिससे नए कस्टमर आपको आसानी से ढूंढ सकते हैं।</span></p>
+                            </div>
+                            <div class="card-back">
+                                <h3><span class="lang-en">Discover More</span><span class="lang-hi" style="display:none;">और जानें</span></h3>
+                                <p><span class="lang-en">Reach a larger audience and grow your customer base with a professional online presence.</span><span class="lang-hi" style="display:none;">एक पेशेवर ऑनलाइन उपस्थिति के साथ बड़े दर्शकों तक पहुंचें और अपना ग्राहक आधार बढ़ाएं।</span></p>
+                                <a href="#agreement" class="btn" style="margin-top: 15px; padding: 10px 20px; font-size: 0.9rem;"><span class="lang-en">Learn More</span><span class="lang-hi" style="display:none;">और जानें</span></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <div class="icon"><i class="fas fa-handshake"></i></div>
+                                <h3><span class="lang-en">Build Brand Trust</span><span class="lang-hi" style="display:none;">ब्रांड का भरोसा बनाएं</span></h3>
+                                <p><span class="lang-en">A good website makes your work look professional and helps win customer trust.</span><span class="lang-hi" style="display:none;">एक अच्छी वेबसाइट आपके काम को पेशेवर दिखाती है और ग्राहकों का विश्वास जीतने में मदद करती है।</span></p>
+                            </div>
+                             <div class="card-back">
+                                <h3><span class="lang-en">Build Trust</span><span class="lang-hi" style="display:none;">विश्वास बनाएं</span></h3>
+                                <p><span class="lang-en">A polished website builds credibility and shows customers you are a serious, professional brand.</span><span class="lang-hi" style="display:none;">एक शानदार वेबसाइट विश्वसनीयता बनाती है और ग्राहकों को दिखाती है कि आप एक गंभीर, पेशेवर ब्रांड हैं।</span></p>
+                                <a href="#agreement" class="btn" style="margin-top: 15px; padding: 10px 20px; font-size: 0.9rem;"><span class="lang-en">Learn More</span><span class="lang-hi" style="display:none;">और जानें</span></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" data-aos="fade-up" data-aos-delay="400">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <div class="icon"><i class="fas fa-chart-pie"></i></div>
+                                <h3><span class="lang-en">Unique Market Identity</span><span class="lang-hi" style="display:none;">बाजार में अलग पहचान</span></h3>
+                                <p><span class="lang-en">We create a unique design for you that sets you apart from the competition.</span><span class="lang-hi" style="display:none;">हम आपके लिए एक अनूठा डिज़ाइन बनाते हैं जो आपको प्रतिस्पर्धा से अलग करता है।</span></p>
+                            </div>
+                            <div class="card-back">
+                                <h3><span class="lang-en">Stand Out</span><span class="lang-hi" style="display:none;">सबसे अलग दिखें</span></h3>
+                                <p><span class="lang-en">Our custom designs ensure your website is unique and memorable, setting you apart from competitors.</span><span class="lang-hi" style="display:none;">हमारे कस्टम डिज़ाइन यह सुनिश्चित करते हैं कि आपकी वेबसाइट अद्वितीय और यादगार हो, जो आपको प्रतिस्पर्धियों से अलग करती है।</span></p>
+                                <a href="#agreement" class="btn" style="margin-top: 15px; padding: 10px 20px; font-size: 0.9rem;"><span class="lang-en">Learn More</span><span class="lang-hi" style="display:none;">और जानें</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="stats">
+            <div class="container">
+                <h2 class="section-title" data-aos="zoom-in">
+                    <span class="lang-en">Project Statistics</span>
+                    <span class="lang-hi" style="display:none;">प्रोजेक्ट आँकड़े</span>
+                </h2>
+                <p class="section-subtitle" data-aos="zoom-in" data-aos-delay="100">
+                    <span class="lang-en">Visualizing our success and growth through key metrics.</span>
+                    <span class="lang-hi" style="display:none;">प्रमुख मैट्रिक्स के माध्यम से हमारी सफलता और विकास की कल्पना।</span>
+                </p>
+                <div class="stats-grid">
+                    <div class="stat-card" data-aos="fade-up" data-aos-delay="200">
+                        <h3><span class="lang-en">Client Satisfaction</span><span class="lang-hi">ग्राहक संतुष्टि</span></h3>
+                        <div class="chart-container">
+                            <svg class="donut-chart" width="150" height="150" viewBox="0 0 100 100">
+                                <defs>
+                                    <linearGradient id="satisfactionGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:var(--color-secondary);stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:var(--color-primary);stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                                <circle class="background" cx="50" cy="50" r="45"></circle>
+                                <circle class="foreground" cx="50" cy="50" r="45" data-percent="92"></circle>
+                            </svg>
+                            <div class="chart-percent" data-target="92">0%</div>
+                        </div>
+                    </div>
+                    <div class="stat-card transparent-card span-2" data-aos="fade-up" data-aos-delay="300">
+                         <h3><span class="lang-en">Annual Growth</span><span class="lang-hi">वार्षिक वृद्धि</span></h3>
+                        <div id="growth-chart-container" class="chart-container" style="min-height: 350px;"></div>
+                    </div>
+                    <div class="stat-card" data-aos="fade-up" data-aos-delay="400">
+                        <h3><span class="lang-en">Projects Per Quarter</span><span class="lang-hi">तिमाही परियोजनाएं</span></h3>
+                        <div class="chart-container">
+                            <svg id="projects-bar-chart" class="bar-chart" width="100%" height="100%" viewBox="0 0 300 200"></svg>
+                        </div>
+                    </div>
+                     <div class="stat-card" data-aos="fade-up" data-aos-delay="500">
+                        <h3><span class="lang-en">Technology Proficiency</span><span class="lang-hi">प्रौद्योगिकी प्रवीणता</span></h3>
+                        <div class="chart-container">
+                            <svg id="tech-radar-chart" class="radar-chart" width="100%" height="100%" viewBox="0 0 200 200"></svg>
+                        </div>
+                    </div>
+                    <div class="stat-card" data-aos="fade-up" data-aos-delay="600">
+                        <h3><span class="lang-en">Service Performance</span><span class="lang-hi">सेवा प्रदर्शन</span></h3>
+                        <div class="chart-container">
+                                <div class="horizontal-bars">
+                                    <div class="h-bar-group">
+                                        <label>Web Design</label>
+                                        <div class="h-bar-progress"><div class="h-bar-fill h-bar-1"></div></div>
+                                    </div>
+                                    <div class="h-bar-group">
+                                        <label>AI Solutions</label>
+                                        <div class="h-bar-progress"><div class="h-bar-fill h-bar-2"></div></div>
+                                    </div>
+                                    <div class="h-bar-group">
+                                        <label>SEO</label>
+                                        <div class="h-bar-progress"><div class="h-bar-fill h-bar-3"></div></div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                    <div class="stat-card" data-aos="fade-up" data-aos-delay="700">
+                        <h3><span class="lang-en">Projects Completed</span><span class="lang-hi">परियोजनाएं पूरी हुईं</span></h3>
+                        <div class="chart-container">
+                                <div class="kpi-container" data-target="150">0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="agreement">
+            <div class="container">
+                <h2 class="section-title" data-aos="zoom-in"><span class="lang-en">Website Design Service Agreement</span><span class="lang-hi" style="display:none;">वेबसाइट डिज़ाइन सेवा समझौता</span></h2>
+                <p class="section-subtitle" data-aos="zoom-in" data-aos-delay="100">
+                    <span class="lang-en">This agreement is between Prompt Minds ("Service Provider") and the client ("Client"). Our key terms are explained below.</span>
+                    <span class="lang-hi" style="display:none;">यह समझौता प्रॉम्प्ट माइंड्स ("सेवा प्रदाता") और ग्राहक ("क्लाइंट") के बीच है। हमारी मुख्य शर्तें नीचे दी गई हैं।</span>
+                </p>
+                <ol class="agreement-steps">
+                    <li class="agreement-step" data-aos="fade-left" data-aos-delay="200">
+                        <div class="step-icon">1</div>
+                        <div class="step-content">
+                            <h3><span class="lang-en">Custom Design & Domain</span><span class="lang-hi" style="display:none;">कस्टम डिजाइन और डोमेन</span></h3>
+                            <p><span class="lang-en">We will create a high-quality, custom website design based on the Blogger platform, tailored to your brand's unique identity. This package includes the registration and setup of a professional .com custom domain name, giving your business a credible online address from the very start.</span><span class="lang-hi" style="display:none;">हम आपकी ब्रांड की अनूठी पहचान के अनुरूप, ब्लॉगर प्लेटफॉर्म पर आधारित एक उच्च-गुणवत्ता, कस्टम वेबसाइट डिज़ाइन बनाएंगे। इस पैकेज में एक पेशेवर .com कस्टम डोमेन नाम का पंजीकरण और सेटअप शामिल है, जो आपके व्यवसाय को शुरू से ही एक विश्वसनीय ऑनलाइन पता देता है।</span></p>
+                        </div>
+                    </li>
+                     <li class="agreement-step" data-aos="fade-left" data-aos-delay="200">
+                        <div class="step-icon">2</div>
+                        <div class="step-content">
+                            <h3><span class="lang-en">Custom Tools & Graphics</span><span class="lang-hi" style="display:none;">कस्टम टूल्स और ग्राफिक्स</span></h3>
+                            <p><span class="lang-en">Your website will be enhanced with custom-built tools and integrated features to meet your specific business needs. We will also design high-quality animations and graphics to make your site visually appealing and engaging for visitors, ensuring a memorable user experience.</span><span class="lang-hi" style="display:none;">आपकी वेबसाइट को आपकी विशिष्ट व्यावसायिक आवश्यकताओं को पूरा करने के लिए कस्टम-निर्मित टूल और एकीकृत सुविधाओं के साथ बढ़ाया जाएगा। हम आपकी साइट को आगंतुकों के लिए आकर्षक और आकर्षक बनाने के लिए उच्च-गुणवत्ता वाले एनिमेशन और ग्राफिक्स भी डिजाइन करेंगे, जिससे एक यादगार उपयोगकर्ता अनुभव सुनिश्चित होगा।</span></p>
+                        </div>
+                    </li>
+                     <li class="agreement-step" data-aos="fade-left" data-aos-delay="200">
+                        <div class="step-icon">3</div>
+                        <div class="step-content">
+                            <h3><span class="lang-en">SEO & Search Console</span><span class="lang-hi" style="display:none;">एसईओ और सर्च कंसोल</span></h3>
+                            <p><span class="lang-en">We will perform comprehensive Search Engine Optimization (SEO), including on-page, off-page, internal, and external strategies, to improve your site's visibility. Your website will be verified with Google Search Console and properly indexed, making it easier for potential customers to find you through Google searches.</span><span class="lang-hi" style="display:none;">हम आपकी साइट की दृश्यता में सुधार के लिए ऑन-पेज, ऑफ-पेज, आंतरिक और बाहरी रणनीतियों सहित व्यापक खोज इंजन अनुकूलन (एसईओ) करेंगे। आपकी वेबसाइट को गूगल सर्च कंसोल से सत्यापित किया जाएगा और ठीक से अनुक्रमित किया जाएगा, जिससे संभावित ग्राहकों के लिए आपको गूगल खोजों के माध्यम से ढूंढना आसान हो जाएगा।</span></p>
+                        </div>
+                    </li>
+                     <li class="agreement-step" data-aos="fade-left" data-aos-delay="200">
+                        <div class="step-icon">4</div>
+                        <div class="step-content">
+                            <h3><span class="lang-en">Logo & Security</span><span class="lang-hi" style="display:none;">लोगो और सुरक्षा</span></h3>
+                            <p><span class="lang-en">A custom logo will be designed to represent your brand's identity. We will also set up essential security features, including a Privacy Policy and an SSL Certificate, to ensure your website is secure and trustworthy for all visitors, protecting both your business and your customers' data.</span><span class="lang-hi" style="display:none;">आपके ब्रांड की पहचान का प्रतिनिधित्व करने के लिए एक कस्टम लोगो डिजाइन किया जाएगा। हम यह सुनिश्चित करने के लिए कि आपकी वेबसाइट सभी आगंतुकों के लिए सुरक्षित और भरोसेमंद है, एक गोपनीयता नीति और एक एसएसएल प्रमाणपत्र सहित आवश्यक सुरक्षा सुविधाएँ भी स्थापित करेंगे, जो आपके व्यवसाय और आपके ग्राहकों के डेटा दोनों की रक्षा करेगा।</span></p>
+                        </div>
+                    </li>
+                     <li class="agreement-step" data-aos="fade-left" data-aos-delay="200">
+                        <div class="step-icon">5</div>
+                        <div class="step-content">
+                            <h3><span class="lang-en">Ad Platform Assistance</span><span class="lang-hi" style="display:none;">विज्ञापन प्लेटफॉर्म सहायता</span></h3>
+                            <p><span class="lang-en">We will assist you in the process of applying for Google AdSense or other advertising platforms. While we cannot guarantee approval, as it depends on the ad network's policies, we will ensure your website meets their technical requirements and best practices to maximize your chances of getting approved.</span><span class="lang-hi" style="display:none;">हम आपको गूगल एडसेंस या अन्य विज्ञापन प्लेटफॉर्म के लिए आवेदन करने की प्रक्रिया में सहायता करेंगे। हालांकि हम अनुमोदन की गारंटी नहीं दे सकते, क्योंकि यह विज्ञापन नेटवर्क की नीतियों पर निर्भर करता है, हम यह सुनिश्चित करेंगे कि आपकी वेबसाइट उनके तकनीकी आवश्यकताओं और सर्वोत्तम प्रथाओं को पूरा करती है ताकि आपके अनुमोदित होने की संभावना अधिकतम हो।</span></p>
+                        </div>
+                    </li>
+                     <li class="agreement-step" data-aos="fade-left" data-aos-delay="200">
+                        <div class="step-icon">6</div>
+                        <div class="step-content">
+                            <h3><span class="lang-en">Timeline</span><span class="lang-hi" style="display:none;">समयसीमा</span></h3>
+                            <p><span class="lang-en">Your domain and initial setup will be ready within 24-48 hours. The complete, fully functional website will be delivered to you within 7 working days, provided we have all the necessary information from your side. We work efficiently to get you online as quickly as possible.</span><span class="lang-hi" style="display:none;">आपका डोमेन और शुरुआती सेटअप 24-48 घंटों के भीतर तैयार हो जाएगा। पूरी तरह से काम करने वाली वेबसाइट आपको 7 कार्य दिवसों के भीतर डिलीवर कर दी जाएगी, बशर्ते हमारे पास आपकी ओर से सभी आवश्यक जानकारी हो। हम आपको जल्द से जल्द ऑनलाइन लाने के लिए कुशलता से काम करते हैं।</span></p>
+                        </div>
+                    </li>
+                     <li class="agreement-step" data-aos="fade-left" data-aos-delay="200">
+                        <div class="step-icon">7</div>
+                        <div class="step-content">
+                            <h3><span class="lang-en">Payment Terms</span><span class="lang-hi" style="display:none;">भुगतान की शर्तें</span></h3>
+                            <p><span class="lang-en">To begin, we require a 50% advance payment. This helps us secure resources for your project. The final 50% is only due after we've successfully brought at least 500 visitors to your site, or after two months have passed, whichever happens first. This ensures we deliver results before final payment.</span><span class="lang-hi" style="display:none;">शुरू करने के लिए, हमें 50% अग्रिम भुगतान की आवश्यकता है। यह हमें आपके प्रोजेक्ट के लिए संसाधन सुरक्षित करने में मदद करता है। अंतिम 50% का भुगतान तभी किया जाएगा जब हम आपकी साइट पर कम से-कम 500 विज़िटर सफलतापूर्वक ला देंगे, या दो महीने बीत जाने के बाद, जो भी पहले हो। यह सुनिश्चित करता है कि हम अंतिम भुगतान से पहले परिणाम दें।</span></p>
+                        </div>
+                    </li>
+                     <li class="agreement-step" data-aos="fade-left" data-aos-delay="200">
+                        <div class="step-icon">8</div>
+                        <div class="step-content">
+                            <h3><span class="lang-en">Client Responsibilities</span><span class="lang-hi" style="display:none;">ग्राहक की ज़िम्मेदारियाँ</span></h3>
+                            <p><span class="lang-en">To ensure a smooth process, we need you to provide all website content (like text and brand details) on time. You are also responsible for making sure you have the legal rights (copyright) to all the content you provide. This protects both you and us from legal issues.</span><span class="lang-hi" style="display:none;">एक सहज प्रक्रिया सुनिश्चित करने के लिए, हमें आपकी ओर से सभी वेबसाइट सामग्री (जैसे टेक्स्ट और ब्रांड विवरण) समय पर प्रदान करने की आवश्यकता है। आप यह सुनिश्चित करने के लिए भी जिम्मेदार हैं कि आपके द्वारा प्रदान की गई सभी सामग्री पर आपका कानूनी अधिकार (कॉपीराइट) है। यह आपको और हमें दोनों को कानूनी मुद्दों से बचाता है।</span></p>
+                        </div>
+                    </li>
+                     <li class="agreement-step" data-aos="fade-left" data-aos-delay="200">
+                        <div class="step-icon">9</div>
+                        <div class="step-content">
+                            <h3><span class="lang-en">Ownership & Rights</span><span class="lang-hi" style="display:none;">स्वामित्व और अधिकार</span></h3>
+                            <p><span class="lang-en">Upon full payment, you will become the complete owner of the website and the domain name. All rights will be transferred to you. We only reserve the right to display the project in our portfolio to showcase our work to future clients, which also serves as a promotion for your site.</span><span class="lang-hi" style="display:none;">पूर्ण भुगतान पर, आप वेबसाइट और डोमेन नाम के पूर्ण स्वामी बन जाएंगे। सभी अधिकार आपको हस्तांतरित कर दिए जाएंगे। हम केवल भविष्य के ग्राहकों को अपना काम दिखाने के लिए अपने पोर्टफोलियो में प्रोजेक्ट को प्रदर्शित करने का अधिकार सुरक्षित रखते हैं, जो आपकी साइट के प्रचार के रूप में भी काम करता है।</span></p>
+                        </div>
+                    </li>
+                     <li class="agreement-step" data-aos="fade-left" data-aos-delay="200">
+                        <div class="step-icon">10</div>
+                        <div class="step-content">
+                            <h3><span class="lang-en">Cancellation Policy</span><span class="lang-hi" style="display:none;">रद्दीकरण नीति</span></h3>
+                            <p><span class="lang-en">If you decide to cancel the project after it has started, the 50% advance payment will not be refunded. This is because it covers the costs of the initial work, domain purchase, and resources allocated. However, if we fail to deliver the project on time, you are entitled to a full refund of your advance payment.</span><span class="lang-hi" style="display:none;">यदि आप प्रोजेक्ट शुरू होने के बाद उसे रद्द करने का निर्णय लेते हैं, तो 50% अग्रिम भुगतान वापस नहीं किया जाएगा। ऐसा इसलिए है क्योंकि यह प्रारंभिक कार्य, डोमेन खरीद और आवंटित संसाधनों की लागत को कवर करता है। हालांकि, यदि हम समय पर प्रोजेक्ट देने में विफल रहते हैं, तो आप अपने अग्रिम भुगतान की पूरी वापसी के हकदार हैं।</span></p>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+        </section>
+        
+        <section id="faq">
+            <div class="container">
+                <h2 class="section-title" data-aos="zoom-in"><span class="lang-en">Frequently Asked Questions</span><span class="lang-hi" style="display:none;">अक्सर पूछे जाने वाले सवाल</span></h2>
+                <div class="faq-item" data-aos="fade-up" data-aos-delay="200">
+                    <div class="faq-question">
+                        <span class="lang-en">What is the payment process?</span>
+                        <span class="lang-hi" style="display:none;">पेमेंट प्रोसेस क्या है?</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>
+                           <span class="lang-en">50% advance to start, and the remaining 50% after your website gets 500 visitors or after 2 months (whichever comes first).</span>
+                           <span class="lang-hi" style="display:none;">शुरू करने के लिए 50% एडवांस, और बाकी 50% आपकी वेबसाइट पर 500 विज़िटर आने के बाद या 2 महीने बाद (जो भी पहले हो)।</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="faq-item" data-aos="fade-up" data-aos-delay="300">
+                    <div class="faq-question">
+                        <span class="lang-en">Who owns the website after completion?</span>
+                        <span class="lang-hi" style="display:none;">वेबसाइट पूरी होने के बाद इसका मालिक कौन होगा?</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>
+                            <span class="lang-en">After full payment, you will have 100% ownership of the website and domain. It's completely yours.</span>
+                            <span class="lang-hi" style="display:none;">पूरा पेमेंट होने के बाद, वेबसाइट और डोमेन का 100% मालिकाना हक़ आपका होगा। यह पूरी तरह से आपका है।</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="faq-item" data-aos="fade-up" data-aos-delay="400">
+                    <div class="faq-question">
+                        <span class="lang-en">What if I cancel the project?</span>
+                        <span class="lang-hi" style="display:none;">अगर मैं प्रोजेक्ट कैंसिल करूँ तो क्या होगा?</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>
+                            <span class="lang-en">If you cancel after the project has started, the advance payment is non-refundable as it covers our initial setup costs.</span>
+                            <span class="lang-hi" style="display:none;">यदि आप प्रोजेक्ट शुरू होने के बाद कैंसिल करते हैं, तो एडवांस पेमेंट वापस नहीं किया जाएगा क्योंकि यह हमारी शुरुआती सेटअप लागत को कवर करता है।</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="faq-item" data-aos="fade-up" data-aos-delay="500">
+                    <div class="faq-question">
+                        <span class="lang-en">How long does it take to build the website?</span>
+                        <span class="lang-hi" style="display:none;">वेबसाइट बनाने में कितना समय लगता है?</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>
+                            <span class="lang-en">Your website will be ready and delivered within 7 working days after we receive all the necessary content and information from you.</span>
+                            <span class="lang-hi" style="display:none;">आपसे सभी आवश्यक सामग्री और जानकारी प्राप्त होने के 7 कार्य दिवसों के भीतर आपकी वेबसाइट तैयार और डिलीवर हो जाएगी।</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4><span class="lang-en">PROMPT MINDS</span><span class="lang-hi" style="display:none;">प्रॉम्प्ट माइंड्स</span></h4>
+                    <p><span class="lang-en">We craft digital experiences, turning your vision into a professional, high-performance website. Your success is our code.</span><span class="lang-hi" style="display:none;">हम डिजिटल अनुभव तैयार करते हैं, आपके विजन को एक पेशेवर, उच्च-प्रदर्शन वाली वेबसाइट में बदलते हैं। आपकी सफलता ही हमारा कोड है।</span></p>
+                </div>
+                <div class="footer-section">
+                    <h4><span class="lang-en">Quick Links</span><span class="lang-hi" style="display:none;">क्विक लिंक्स</span></h4>
+                    <ul>
+                        <li><a href="#home"><span class="lang-en">Home</span><span class="lang-hi" style="display:none;">होम</span></a></li>
+                        <li><a href="#about"><span class="lang-en">About</span><span class="lang-hi" style="display:none;">हमारे बारे में</span></a></li>
+                        <li><button class="footer-btn info-btn" data-page="privacy"><span class="lang-en">Privacy Policy</span><span class="lang-hi" style="display:none;">गोपनीयता नीति</span></button></li>
+                        <li><button class="footer-btn info-btn" data-page="terms"><span class="lang-en">Terms & Service</span><span class="lang-hi" style="display:none;">नियम और सेवा</span></button></li>
+                        <li><button id="open-admin-modal-btn" class="footer-btn"><span class="lang-en">Admin Panel</span><span class="lang-hi" style="display:none;">एडमिन पैनल</span></button></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4><span class="lang-en">Contact Us</span><span class="lang-hi" style="display:none;">संपर्क करें</span></h4>
+                    <p>Email: <a href="mailto:business.newviral@gmail.com">business.newviral@gmail.com</a></p>
+                    <div class="social-links">
+                      <a href="https://www.youtube.com/@Promptminds2" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                        <a href="https://www.facebook.com/profile.php?id=61575171087787" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://x.com/PromptMinds" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.instagram.com/promptminds/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://t.me/newviralak" target="_blank" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Prompt Minds. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <div id="client-modal" class="modal-overlay">
+        <div class="modal-content">
+            <canvas class="modal-background-canvas"></canvas>
+            <button class="modal-close" data-modal-id="client-modal">&times;</button>
+            <div class="modal-body">
+                <div id="client-modal-content" style="width: 100%;"></div>
+            </div>
+        </div>
+    </div>
+    <div id="admin-modal" class="modal-overlay">
+        <div class="modal-content">
+            <canvas class="modal-background-canvas"></canvas>
+            <button class="modal-close" data-modal-id="admin-modal">&times;</button>
+            <div class="modal-body">
+                <div id="admin-modal-content" style="width: 100%;"></div>
+            </div>
+        </div>
+    </div>
+    <div id="edit-modal" class="modal-overlay">
+        <div class="modal-content">
+             <canvas class="modal-background-canvas"></canvas>
+            <button class="modal-close" data-modal-id="edit-modal">&times;</button>
+            <div class="modal-body">
+                 <div class="form-container" style="background-color: transparent; border: none; box-shadow: none; width: 100%;">
+                    <h2 id="modal-title" class="section-title">Edit Client Data</h2>
+                    <form id="edit-form"></form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="confirm-modal" class="modal-overlay">
+        <div class="modal-content">
+             <button class="modal-close" data-modal-id="confirm-modal">&times;</button>
+             <div class="modal-body" style="justify-content: center; align-items: center;">
+                 <div>
+                    <h3 id="confirm-title">Are you sure?</h3>
+                    <p id="confirm-text" style="margin: 20px 0;"></p>
+                    <div class="btn-group">
+                        <button id="confirm-yes-btn" class="btn">Yes, Delete</button>
+                        <button id="confirm-no-btn" class="btn" style="background: var(--bg-tertiary);">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- INFO MODAL -->
+    <div id="info-modal" class="modal-overlay">
+        <div class="modal-content">
+            <canvas class="modal-background-canvas"></canvas>
+            <button class="modal-close" data-modal-id="info-modal">&times;</button>
+            <div class="modal-body">
+                <div class="page-content" id="info-modal-content" style="width: 100%;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Voice Assistant & Chatbot Buttons -->
+    <button id="chatbot-toggle" aria-label="Toggle AI Chatbot">
+        <i class="fas fa-robot"></i>
+    </button>
+    <button id="voice-assistant-btn" aria-label="Toggle Voice Assistant">
+        <i class="fas fa-microphone"></i>
+    </button>
+    
+    <div id="chatbot-container">
+        <div class="chatbot-header">Prompt Minds AI Assistant</div>
+        <div class="chatbot-messages">
+            <div class="chat-message bot">
+                Namaste! Main aapki kaise sahayata kar sakta hoon?
+            </div>
+        </div>
+        <form class="chatbot-input-form">
+            <input type="text" id="chatbot-input" placeholder="Ask a question..." autocomplete="off">
+            <button type="submit" id="chatbot-send"><i class="fas fa-paper-plane"></i></button>
+        </form>
+    </div>
+
+    
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- ===> LINK TO YOUR JAVASCRIPT FILE <=== -->
+    <script src="script.js"></script>
+</body>
+</html>
