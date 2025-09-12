@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- Global Variables & Constants ---
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwszFP4iiQOCb72ppUrozveyEMb3z7NhSP-7wugKsZnqPZhYD3ZPUDFEY966V9CH9LuCQ/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz9jFw3jgPfX33KxoE7xfR1nbLaeE8tUCyuMYn0AZP-6Xr1A72gH4sPn4WCg30_lk3kFw/exec';
     
     const ALL_HEADERS = [ "Project", "Date", "Ean Date", "Domain", "Name", "Country", "State", "District", "City", "Zip Code", "Email", "Second Email", "Password", "Mobile Number", "Adsterra Email", "Adsterra Password", "Ammount", "Status", "REG. ID", "Half Payment" ];
     
@@ -696,4 +696,5 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // --- INITIAL LOAD ---
     loadReviews();
+
 });
