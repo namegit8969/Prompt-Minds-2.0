@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // --- Global Variables & Constants ---
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxrGIdIwO9yVRxfDcHn4ZMkXfeJR2YMbFr0NkV7Sfvf-52i4J7F11G0mDFobDUZK48dYQ/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx2gS_SnSr6N2-NmrybsuJnM8lVFxycL2J9cPscQr4R-h1UniSrSqXypE4RkBXzkaogJQ/exec';
     
     const ALL_HEADERS = [ "Project", "Date", "Ean Date", "Domain", "Name", "Country", "State", "District", "City", "Zip Code", "Email", "Second Email", "Password", "Mobile Number", "Adsterra Email", "Adsterra Password", "Ammount", "Status", "REG. ID", "Half Payment" ];
     const PARTNER_HEADERS = ["Referral ID", "Partner Name", "Email", "Phone", "Photo URL", "Join Date"];
@@ -443,8 +443,55 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>`;
 
         let leadsHTML = `<div id="leads-tab" class="admin-tab-content active"><div class="leads-container">`;
-        if (leads.length > 0) { leads.forEach(lead => { const isNew = lead.Status === 'New'; const leadDate = new Date(lead.Timestamp).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short'}); leadsHTML += `<div class="lead-card ${isNew ? 'new-lead' : ''}"><div class="lead-header"><span class="lead-name">${lead.Name}</span><select class="lead-status-select" data-timestamp="${new Date(lead.Timestamp).toISOString()}"><option value="New" ${lead.Status === 'New' ? 'selected' : ''}>New</option><option value="Contacted" ${lead.Status === 'Contacted' ? 'selected' : ''}>Contacted</option><option value="Converted" ${lead.Status === 'Converted' ? 'selected' : ''}>Converted</option><option value="Closed" ${lead.Status === 'Closed' ? 'selected' : ''}>Closed</option></select></div><div class="lead-contact"><a href="mailto:${lead.Email}">${lead.Email}</a><span class="phone-container"><a href="tel:${lead.Phone}" class="lead-phone-number">${lead.Phone}</a><button class="copy-btn" data-phone="${lead.Phone}" title="Copy Number" aria-label="Copy phone number"><i class="fas fa-copy"></i></button></span><div class="lead-date">${leadDate}</div></div><div class="lead-message"><p>${lead.Message}</p></div></div>`; }); }
-        else { leadsHTML += `<p><span class="lang-en">No new leads found.</span><span class="lang-hi">कोई नई लीड नहीं मिली।</span></p>`; }
+        if (leads.length > 0) { 
+            leads.forEach(lead => { 
+                const isNew = lead.Status === 'New'; 
+                
+                // ================== START: FIX FOR "Invalid time value" ==================
+                let leadDateFormatted, leadTimestampISO;
+
+                // Check if the timestamp is valid before creating a Date object
+                if (lead.Timestamp && !isNaN(new Date(lead.Timestamp).getTime())) {
+                    const leadDate = new Date(lead.Timestamp);
+                    leadDateFormatted = leadDate.toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' });
+                    leadTimestampISO = leadDate.toISOString();
+                } else {
+                    // Provide fallback values if the timestamp is invalid or missing
+                    leadDateFormatted = 'Date not available';
+                    leadTimestampISO = ''; // Use an empty string so it doesn't break data attributes
+                }
+                // =================== END: FIX FOR "Invalid time value" ===================
+
+                leadsHTML += `
+                <div class="lead-card ${isNew ? 'new-lead' : ''}">
+                    <div class="lead-header">
+                        <span class="lead-name">${lead.Name}</span>
+                        <div class="lead-controls">
+                            <select class="lead-status-select" data-timestamp="${leadTimestampISO}" ${!leadTimestampISO ? 'disabled' : ''}>
+                                <option value="New" ${lead.Status === 'New' ? 'selected' : ''}>New</option>
+                                <option value="Contacted" ${lead.Status === 'Contacted' ? 'selected' : ''}>Contacted</option>
+                                <option value="Converted" ${lead.Status === 'Converted' ? 'selected' : ''}>Converted</option>
+                                <option value="Closed" ${lead.Status === 'Closed' ? 'selected' : ''}>Closed</option>
+                            </select>
+                            <button class="action-btn delete-btn lead-delete-btn" data-timestamp="${leadTimestampISO}" data-name="${lead.Name}" title="Delete Lead" ${!leadTimestampISO ? 'disabled' : ''}>
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="lead-contact">
+                        <a href="mailto:${lead.Email}">${lead.Email}</a>
+                        <span class="phone-container">
+                            <a href="tel:${lead.Phone}" class="lead-phone-number">${lead.Phone}</a>
+                            <button class="copy-btn" data-phone="${lead.Phone}" title="Copy Number" aria-label="Copy phone number"><i class="fas fa-copy"></i></button>
+                        </span>
+                        <div class="lead-date">${leadDateFormatted}</div>
+                    </div>
+                    <div class="lead-message"><p>${lead.Message}</p></div>
+                </div>`; 
+            }); 
+        } else { 
+            leadsHTML += `<p><span class="lang-en">No new leads found.</span><span class="lang-hi">कोई नई लीड नहीं मिली।</span></p>`; 
+        }
         leadsHTML += `</div></div>`;
         
         let clientsHTML = `<div id="clients-tab" class="admin-tab-content"><div class="admin-actions"><h3><span class="lang-en">All Clients</span></h3><button class="btn" id="add-user-btn" style="width:auto; padding: 10px 20px;"><span class="lang-en">+ Add New Client</span><span class="lang-hi">+ नया क्लाइंट जोड़ें</span></button></div><div class="admin-table-wrapper"><table class="admin-table"><thead><tr><th>Name</th><th>REG. ID</th><th>Domain</th><th>Actions</th></tr></thead><tbody>`;
@@ -472,6 +519,14 @@ document.addEventListener('DOMContentLoaded', () => {
         dashboard.querySelectorAll('.lead-status-select').forEach(select => select.addEventListener('change', handleLeadStatusChange));
         dashboard.querySelectorAll('.copy-btn').forEach(button => button.addEventListener('click', handleCopyClick));
         
+        // NEW: Add event listener for lead delete buttons
+        dashboard.querySelectorAll('.lead-delete-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const { timestamp, name } = e.currentTarget.dataset;
+                showConfirmModal(`Are you sure you want to delete the lead from "${name}"? This action is permanent.`, () => handleDeleteLead(timestamp));
+            });
+        });
+        
         dashboard.querySelector('#add-user-btn').addEventListener('click', () => openEditModal());
         dashboard.querySelectorAll('#clients-tab .edit-btn').forEach(btn => btn.addEventListener('click', (e) => { const userToEdit = clients.find(u => u['REG. ID'] === e.currentTarget.dataset.regid); openEditModal(userToEdit); }));
         dashboard.querySelectorAll('#clients-tab .delete-btn').forEach(btn => btn.addEventListener('click', (e) => { const { regid, name } = e.currentTarget.dataset; showConfirmModal(`Are you sure you want to delete client "${name}" (${regid})? This action cannot be undone.`, () => handleDelete(regid)); }));
@@ -490,6 +545,25 @@ document.addEventListener('DOMContentLoaded', () => {
             const card = select.closest('.lead-card'); if (status === 'New') card.classList.add('new-lead'); else card.classList.remove('new-lead');
         } catch (error) { alert(`Error updating status: ${error.message}`); loadAdminDashboard(); }
         finally { select.disabled = false; }
+    }
+    // NEW: Function to handle lead deletion
+    async function handleDeleteLead(timestamp) {
+        try {
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'deleteLead', timestamp }),
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+            });
+            const result = await response.json();
+            if (result.success) {
+                showMessage(result.message, 'success', adminModalContent.querySelector('#admin-dashboard-container'));
+                loadAdminDashboard();
+            } else {
+                throw new Error(result.message);
+            }
+        } catch (error) {
+            showMessage(`Error deleting lead: ${error.message}`, 'error', adminModalContent.querySelector('#admin-dashboard-container'));
+        }
     }
     function openEditModal(user = null) { const modal = document.getElementById('edit-modal'); modalTitle.innerHTML = user ? `<span class="lang-en">Edit ${user.Name}</span><span class="lang-hi">${user.Name} संपादित करें</span>` : '<span class="lang-en">Add New Client</span><span class="lang-hi">नया क्लाइंट जोड़ें</span>'; let formContent = '<div class="fields-grid" style="max-height: 60vh; overflow-y: auto; padding-right: 15px;">'; ALL_HEADERS.forEach(header => { const value = user ? user[header] || '' : ''; const isReadOnly = (header === 'REG. ID' && user); formContent += `<div class="form-group"><label>${header}</label><input type="text" name="${header}" value="${value}" ${isReadOnly ? 'readonly' : ''}></div>`; }); formContent += `</div><button type="submit" class="btn" style="width:100%; margin-top:20px;">${user ? '<span class="lang-en">Save Changes</span><span class="lang-hi">बदलाव सहेजें</span>' : '<span class="lang-en">Add Client</span><span class="lang-hi">क्लाइंट जोड़ें</span>'}</button>`; editForm.innerHTML = formContent; editForm.onsubmit = handleClientFormSubmit; setLanguage(localStorage.getItem('language') || 'en'); showModal(modal); }
     async function handleClientFormSubmit(e) { e.preventDefault(); const btn = editForm.querySelector('button[type="submit"]'); btn.disabled = true; const formData = new FormData(editForm); const data = Object.fromEntries(formData.entries()); const action = (data['REG. ID']) ? 'editUser' : 'addUser'; try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action, data }), headers: { 'Content-Type': 'text/plain;charset=utf-8' } }); const result = await response.json(); if(result.success) { hideModal(document.getElementById('edit-modal')); showMessage(result.message, 'success', adminModalContent.querySelector('#admin-dashboard-container')); loadAdminDashboard(); } else { throw new Error(result.message); } } catch (error) { alert(error.message); } finally { btn.disabled = false; } };
