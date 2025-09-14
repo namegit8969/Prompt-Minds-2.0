@@ -555,6 +555,13 @@ html[data-theme='light'] .form-group input, html[data-theme='light'] .form-group
 .lead-message { background-color: var(--bg-primary); padding: 10px; border-radius: 6px; }
 .lead-status-select { background-color: var(--bg-secondary); border: 1px solid var(--border-color); color: var(--color-text); border-radius: 6px; padding: 5px 10px; }
 
+/* NEW: Styles for lead controls */
+.lead-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 .phone-container { display: inline-flex; align-items: center; gap: 8px; }
 .copy-btn { background: none; border: none; color: var(--color-text-muted); cursor: pointer; font-size: 0.9rem; transition: color 0.3s, transform 0.2s; padding: 2px 5px;}
 .copy-btn:hover { color: var(--color-primary); transform: scale(1.2); }
