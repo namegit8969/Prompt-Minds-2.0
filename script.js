@@ -1,24 +1,33 @@
 document.addEventListener('DOMContentLoaded', () => {
     AOS.init({ duration: 800, once: true, offset: 50 });
 
-    // --- Security: Disable Right-Click and Dev Shortcuts ---
-    document.addEventListener('contextmenu', event => event.preventDefault());
-    document.addEventListener('keydown', event => {
-        if (event.key === 'F12' || (event.ctrlKey && event.shiftKey && ['I', 'J', 'C'].includes(event.key.toUpperCase())) || (event.ctrlKey && event.key.toUpperCase() === 'U')) {
-            event.preventDefault();
-        }
-    });
+    // --- Lightweight Particle Background Initialization ---
+    function initParticles() {
+        particlesJS('particles-js', {
+            "particles": {
+                "number": { "value": 50, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#ffffff" },
+                "shape": { "type": "circle", "stroke": { "width": 0, "color": "#000000" }, "polygon": { "nb_sides": 5 } },
+                "opacity": { "value": 0.4, "random": true, "anim": { "enable": true, "speed": 1, "opacity_min": 0.1, "sync": false } },
+                "size": { "value": 5, "random": true, "anim": { "enable": false, "speed": 40, "size_min": 0.1, "sync": false } },
+                "line_linked": { "enable": false },
+                "move": { "enable": true, "speed": 2, "direction": "none", "random": true, "straight": false, "out_mode": "out", "bounce": false, "attract": { "enable": false, "rotateX": 600, "rotateY": 1200 } }
+            },
+            "interactivity": {
+                "detect_on": "canvas", "events": { "onhover": { "enable": false }, "onclick": { "enable": false }, "resize": true },
+            },
+            "retina_detect": true
+        });
+    }
+
 
     // --- Global Variables & Constants ---
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz9jFw3jgPfX33KxoE7xfR1nbLaeE8tUCyuMYn0AZP-6Xr1A72gH4sPn4WCg30_lk3kFw/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxrGIdIwO9yVRxfDcHn4ZMkXfeJR2YMbFr0NkV7Sfvf-52i4J7F11G0mDFobDUZK48dYQ/exec';
     
     const ALL_HEADERS = [ "Project", "Date", "Ean Date", "Domain", "Name", "Country", "State", "District", "City", "Zip Code", "Email", "Second Email", "Password", "Mobile Number", "Adsterra Email", "Adsterra Password", "Ammount", "Status", "REG. ID", "Half Payment" ];
-    
-    let vantaEffect = null;
-    let welcomeVantaEffect = null;
-    let modalVantaEffects = {};
+    const PARTNER_HEADERS = ["Referral ID", "Partner Name", "Email", "Phone", "Photo URL", "Join Date"];
+
     const header = document.querySelector('header');
-    
     let testimonials = [];
 
     // --- Scrolled Header Effect ---
@@ -68,107 +77,16 @@ document.addEventListener('DOMContentLoaded', () => {
         item.classList.toggle('active');
     }));
 
-    // --- NEW: Custom Cursor Logic ---
-    const cursorDot = document.querySelector('.cursor-dot');
-    const cursorOutline = document.querySelector('.cursor-outline');
-    window.addEventListener('mousemove', (e) => {
-        cursorDot.style.left = `${e.clientX}px`;
-        cursorDot.style.top = `${e.clientY}px`;
-        cursorOutline.style.left = `${e.clientX}px`;
-        cursorOutline.style.top = `${e.clientY}px`;
-    });
-    const hoverables = document.querySelectorAll('a, button, .flip-card, .faq-question, .slider-nav button, .dot');
-    hoverables.forEach(el => {
-        el.addEventListener('mouseenter', () => cursorOutline.classList.add('hovered'));
-        el.addEventListener('mouseleave', () => cursorOutline.classList.remove('hovered'));
-    });
-
-    // --- UPDATED: Universal Vanta.js Background Logic ---
-    function startWelcomeVanta(isDark) {
-        if (welcomeVantaEffect) welcomeVantaEffect.destroy();
-        // FIX: Changed BIRDS to NET for the "block link" effect on the welcome screen
-        if (typeof VANTA !== 'undefined' && VANTA.NET) {
-            welcomeVantaEffect = VANTA.NET({
-                el: "#welcome-canvas",
-                mouseControls: true,
-                touchControls: true,
-                gyroControls: false,
-                minHeight: 200.00,
-                minWidth: 200.00,
-                scale: 1.00,
-                scaleMobile: 1.00,
-                color: isDark ? 0x1b98e0 : 0x007bff,
-                backgroundColor: isDark ? 0x0a0a14 : 0xf8f9fa,
-                points: 12.00,
-                maxDistance: 22.00,
-                spacing: 18.00
-            });
-        }
-    }
-
-    function startVantaBackground(isDark) {
-        if (vantaEffect) vantaEffect.destroy();
-        if (typeof VANTA !== 'undefined' && VANTA.NET) {
-            vantaEffect = VANTA.NET({
-                el: "#dynamic-background",
-                mouseControls: true,
-                touchControls: true,
-                gyroControls: false,
-                minHeight: 200.00,
-                minWidth: 200.00,
-                scale: 1.00,
-                scaleMobile: 1.00,
-                color: isDark ? 0x1b98e0 : 0x007bff,
-                backgroundColor: isDark ? 0x0a0a14 : 0xf8f9fa,
-                points: 12.00,
-                maxDistance: 22.00,
-                spacing: 18.00
-            });
-        }
-    }
-
-    function startVantaModalBackground(modalId, isDark) {
-        if (modalVantaEffects[modalId]) modalVantaEffects[modalId].destroy();
-        const canvasEl = document.querySelector(`#${modalId} .modal-background-canvas`);
-        if (!canvasEl) return;
-        if (typeof VANTA !== 'undefined' && VANTA.FOG) {
-             modalVantaEffects[modalId] = VANTA.FOG({
-                el: canvasEl,
-                mouseControls: true, touchControls: true, gyroControls: false,
-                minHeight: 200.00, minWidth: 200.00,
-                highlightColor: isDark ? 0x1b98e0 : 0x28a745,
-                midtoneColor: isDark ? 0x9b59b6 : 0x007bff,
-                lowlightColor: isDark ? 0x3a476a : 0xe9ecef,
-                baseColor: isDark ? 0x121220 : 0xffffff,
-                blurFactor: 0.60,
-                speed: 1.10,
-                zoom: 0.90
-            });
-        }
-    }
-
     // --- Theme Switcher ---
     const themeSwitcher = document.getElementById('theme-switcher');
     const setTheme = (theme) => {
         document.documentElement.dataset.theme = theme;
         localStorage.setItem('theme', theme);
         themeSwitcher.querySelector('i').className = theme === 'dark' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
-        const isDark = theme === 'dark';
-        
-        const welcomeScreen = document.getElementById('welcome-screen');
-        if (welcomeScreen && welcomeScreen.style.visibility !== 'hidden') {
-            startWelcomeVanta(isDark);
-        } else if (vantaEffect) {
-            startVantaBackground(isDark);
-        }
-
-        document.querySelectorAll('.modal-overlay.visible').forEach(modal => {
-            startVantaModalBackground(modal.id, isDark);
-        });
     };
     themeSwitcher.addEventListener('click', () => setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'));
     
-    // --- NEW: Typewriter Effect for Hero Headline ---
+    // --- Typewriter Effect for Hero Headline ---
     function typewriterEffect() {
         const el = document.getElementById('typewriter-text');
         if (!el) return;
@@ -309,6 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
             email: formData.get('email'),
             phone: formData.get('phone'),
             project_details: formData.get('project_details'),
+            referred_by: formData.get('referred_by')
         };
         try {
             const response = await fetch(SCRIPT_URL, {
@@ -319,6 +238,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const result = await response.json();
             if (result.success) {
                 form.reset();
+                document.getElementById('referral-result-area').innerHTML = '';
+                document.getElementById('referred-by-input').value = '';
+
                 messageArea.innerHTML = `<div class="message success">${result.message}</div>`;
             } else { throw new Error(result.message || 'An unknown error occurred.'); }
         } catch (error) {
@@ -329,21 +251,61 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => { messageArea.innerHTML = ''; }, 5000);
         }
     });
+    
+    // NEW: Integrated Referral ID Checker Logic
+    const checkReferralBtn = document.getElementById('check-referral-btn');
+    const referralIdInput = document.getElementById('referral-id-input');
+    const referralResultArea = document.getElementById('referral-result-area');
+    const referredByInput = document.getElementById('referred-by-input');
+
+    checkReferralBtn.addEventListener('click', async () => {
+        const referralId = referralIdInput.value.trim();
+        if (!referralId) {
+            referralResultArea.innerHTML = `<span style="color: var(--color-danger);"><span class="lang-en">Please enter a Referral ID.</span><span class="lang-hi" style="display:none;">कृपया एक रेफरल आईडी दर्ज करें।</span></span>`;
+            setLanguage(localStorage.getItem('language') || 'en');
+            return;
+        }
+
+        checkReferralBtn.disabled = true;
+        const originalBtnText = checkReferralBtn.innerHTML;
+        checkReferralBtn.innerHTML = `<span class="lang-en">Checking...</span><span class="lang-hi" style="display:none;">जाँच हो रही है...</span>`;
+        setLanguage(localStorage.getItem('language') || 'en');
+        referralResultArea.innerHTML = '';
+
+        try {
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'checkReferralId', id: referralId }),
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+            });
+            const result = await response.json();
+            if (result.success) {
+                referralResultArea.innerHTML = `<span style="color: var(--color-secondary);"><i class="fas fa-check-circle"></i> <span class="lang-en">Referred by: ${result.partnerName}</span><span class="lang-hi" style="display:none;">द्वारा संदर्भित: ${result.partnerName}</span></span>`;
+                referredByInput.value = `${result.partnerName} (${referralId})`;
+            } else {
+                referralResultArea.innerHTML = `<span style="color: var(--color-danger);"><i class="fas fa-times-circle"></i> <span class="lang-en">${result.message}</span><span class="lang-hi" style="display:none;">${result.message}</span></span>`;
+                referredByInput.value = '';
+            }
+            setLanguage(localStorage.getItem('language') || 'en');
+        } catch (error) {
+            referralResultArea.innerHTML = `<span style="color: var(--color-danger);"><span class="lang-en">Error checking ID.</span><span class="lang-hi" style="display:none;">आईडी जांचने में त्रुटि।</span></span>`;
+            setLanguage(localStorage.getItem('language') || 'en');
+        } finally {
+            checkReferralBtn.disabled = false;
+            checkReferralBtn.innerHTML = originalBtnText;
+        }
+    });
+
 
     // --- Modal Handling ---
     const allModals = document.querySelectorAll('.modal-overlay');
     function showModal(modal) { 
         modal.classList.add('visible'); 
         document.body.style.overflow = 'hidden'; 
-        startVantaModalBackground(modal.id, document.documentElement.dataset.theme === 'dark');
     }
     function hideModal(modal) { 
         modal.classList.remove('visible'); 
         document.body.style.overflow = ''; 
-        if (modalVantaEffects[modal.id]) { 
-            modalVantaEffects[modal.id].destroy(); 
-            delete modalVantaEffects[modal.id];
-        }
     }
     document.querySelectorAll('.modal-close').forEach(btn => btn.addEventListener('click', () => hideModal(document.getElementById(btn.dataset.modalId))));
     allModals.forEach(overlay => overlay.addEventListener('click', (e) => { if (e.target === overlay) hideModal(overlay); }));
@@ -355,7 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalTitle = document.getElementById('modal-title');
     function showMessage(text, type = 'error', container) { const msgEl = document.createElement('div'); msgEl.innerHTML = `<div class="message ${type}">${text}</div>`; container.prepend(msgEl); setTimeout(() => msgEl.remove(), 4000); }
     document.getElementById('open-client-modal-btn').addEventListener('click', () => { const modal = document.getElementById('client-modal'); clientModalContent.innerHTML = `<div id="user-login-section"><form id="user-login-form" class="form-container"><h2 class="section-title" style="margin-bottom: 30px;"><span class="lang-en">Client Data Portal</span><span class="lang-hi">क्लाइंट डेटा पोर्टल</span></h2><div class="form-group"><label for="user-reg-id"><span class="lang-en">Enter Your Registration ID</span><span class="lang-hi">अपना रजिस्ट्रेशन आईडी डालें</span></label><input type="text" id="user-reg-id" required></div><button type="submit" class="btn" id="user-submit-btn"><span class="lang-en">Fetch My Data</span><span class="lang-hi">मेरा डेटा लाएं</span></button></form></div><div id="user-data-container" class="hidden" style="width:100%"></div>`; clientModalContent.querySelector('#user-login-form').addEventListener('submit', handleUserLogin); setLanguage(localStorage.getItem('language') || 'en'); showModal(modal); });
-    document.getElementById('open-admin-modal-btn').addEventListener('click', () => { const modal = document.getElementById('admin-modal'); adminModalContent.innerHTML = `<div id="admin-login-section"><form id="admin-login-form" class="form-container"><h2 class="section-title" style="margin-bottom: 30px;"><span class="lang-en">Admin Panel</span><span class="lang-hi">एडमिन पैनल</span></h2><div class="form-group"><label for="admin-password"><span class="lang-en">Password</span><span class="lang-hi">पासवर्ड</span></label><input type="password" id="admin-password" required></div><button type="submit" class="btn"><span class="lang-en">Login</span><span class="lang-hi">लॉग इन करें</span></button></form></div><div id="admin-dashboard" class="hidden"></div>`; adminModalContent.querySelector('#admin-login-form').addEventListener('submit', handleAdminLogin); setLanguage(localStorage.getItem('language') || 'en'); showModal(modal); });
+    document.getElementById('open-admin-modal-btn').addEventListener('click', () => { const modal = document.getElementById('admin-modal'); adminModalContent.innerHTML = `<div id="admin-login-section"><form id="admin-login-form" class="form-container"><h2 class="section-title" style="margin-bottom: 30px;"><span class="lang-en">Admin Panel</span><span class="lang-hi">एडमिन पैनल</span></h2><div class="form-group"><label for="admin-password"><span class="lang-en">Password</span><span class="lang-hi">पासवर्ड</span></label><input type="password" id="admin-password" required></div><button type="submit" class="btn"><span class="lang-en">Login</span><span class="lang-hi">लॉग इन करें</span></button></form></div><div id="admin-dashboard-container" class="hidden"></div>`; adminModalContent.querySelector('#admin-login-form').addEventListener('submit', handleAdminLogin); setLanguage(localStorage.getItem('language') || 'en'); showModal(modal); });
     async function handleUserLogin(e) { e.preventDefault(); const form = e.target; const regId = clientModalContent.querySelector('#user-reg-id').value.trim(); if (!regId) return; const btn = e.target.querySelector('button'); btn.disabled = true; btn.innerHTML = '<span class="lang-en">Fetching...</span><span class="lang-hi">लाया जा रहा है...</span>'; setLanguage(localStorage.getItem('language') || 'en'); try { const res = await fetch(`${SCRIPT_URL}?action=getUserData&regId=${encodeURIComponent(regId)}`); const result = await res.json(); if (result.success) { displayUserDataAndAgreement(result.data); } else { showMessage(result.message, 'error', form); clientModalContent.querySelector('#user-data-container').classList.add('hidden'); } } catch (err) { showMessage('An error occurred.', 'error', form); } finally { btn.disabled = false; btn.innerHTML = '<span class="lang-en">Fetch My Data</span><span class="lang-hi">मेरा डेटा लाएं</span>'; setLanguage(localStorage.getItem('language') || 'en'); } }
     function displayUserDataAndAgreement(data) {
         const container = clientModalContent.querySelector('#user-data-container');
@@ -398,11 +360,20 @@ document.addEventListener('DOMContentLoaded', () => {
     async function downloadElementAs(elementId, format, filename) {
         const { jsPDF } = window.jspdf;
         const element = document.getElementById(elementId);
+        if (!element) { console.error("Element to download not found:", elementId); return; }
         const buttons = document.querySelectorAll('.agreement-actions .btn');
         buttons.forEach(btn => btn.disabled = true);
-        const canvas = await html2canvas(element, { scale: 3, useCORS: true, backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--bg-secondary').trim() });
+        
+        const originalBg = element.style.backgroundColor;
+        const bgColor = 'var(--bg-secondary)';
+        element.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue(bgColor).trim();
+
+        const canvas = await html2canvas(element, { scale: 3, useCORS: true, backgroundColor: getComputedStyle(document.documentElement).getPropertyValue(bgColor).trim() });
+        
+        element.style.backgroundColor = originalBg;
+
         if (format === 'png') { const link = document.createElement('a'); link.download = `${filename}.png`; link.href = canvas.toDataURL('image/png'); link.click(); }
-        else if (format === 'pdf') { const imgData = canvas.toDataURL('image/jpeg', 0.95); const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' }); const pdfWidth = pdf.internal.pageSize.getWidth(); const imgProps = pdf.getImageProperties(imgData); const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width; pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight); pdf.save(`${filename}.pdf`); }
+        else if (format === 'pdf') { const imgData = canvas.toDataURL('image/jpeg', 0.95); const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' }); const pdfWidth = pdf.internal.pageSize.getWidth(); const imgProps = pdf.getImageProperties(imgData); const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width; pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST'); pdf.save(`${filename}.pdf`); }
         buttons.forEach(btn => btn.disabled = false);
     }
     async function downloadCombined(filename) {
@@ -437,41 +408,80 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'adminLogin', password: submittedPassword }), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
             const result = await response.json();
-            if (result.success) { adminModalContent.querySelector('#admin-login-section').classList.add('hidden'); adminModalContent.querySelector('#admin-dashboard').classList.remove('hidden'); loadAdminDashboard(); }
+            if (result.success) { adminModalContent.querySelector('#admin-login-section').classList.add('hidden'); adminModalContent.querySelector('#admin-dashboard-container').classList.remove('hidden'); loadAdminDashboard(); }
             else { showMessage('Incorrect Password.', 'error', form); passwordInput.value = ''; }
         } catch (error) { showMessage('Login failed. Please check your connection.', 'error', form); }
         finally { loginBtn.disabled = false; loginBtn.innerHTML = '<span class="lang-en">Login</span><span class="lang-hi">लॉग इन करें</span>'; setLanguage(localStorage.getItem('language') || 'en'); }
     }
     async function loadAdminDashboard() {
-        const dashboard = adminModalContent.querySelector('#admin-dashboard');
-        dashboard.innerHTML = `<p><span class="lang-en">Loading dashboard...</span><span class="lang-hi"> डैशबोर्ड लोड हो रहा है...</span></p>`;
+        const dashboardContainer = adminModalContent.querySelector('#admin-dashboard-container');
+        dashboardContainer.innerHTML = `<p><span class="lang-en">Loading dashboard...</span><span class="lang-hi"> डैशबोर्ड लोड हो रहा है...</span></p>`;
         setLanguage(localStorage.getItem('language') || 'en');
         try {
-            const [clientsRes, leadsRes] = await Promise.all([ fetch(`${SCRIPT_URL}?action=getAllUsers`), fetch(`${SCRIPT_URL}?action=getLeads`) ]);
+            const [clientsRes, leadsRes, partnersRes] = await Promise.all([
+                fetch(`${SCRIPT_URL}?action=getAllUsers`), 
+                fetch(`${SCRIPT_URL}?action=getLeads`),
+                fetch(`${SCRIPT_URL}?action=getPartners`)
+            ]);
             const clientsResult = await clientsRes.json();
             const leadsResult = await leadsRes.json();
-            if (clientsResult.success && leadsResult.success) { renderDashboardContent(clientsResult.data, leadsResult.data); }
-            else { throw new Error(clientsResult.message || leadsResult.message); }
-        } catch (error) { dashboard.innerHTML = `<p style="color:var(--color-danger)">Failed to load dashboard: ${error.message}</p>`; }
+            const partnersResult = await partnersRes.json();
+            if (clientsResult.success && leadsResult.success && partnersResult.success) { 
+                renderDashboardContent(clientsResult.data, leadsResult.data, partnersResult.data);
+            } else { throw new Error(clientsResult.message || leadsResult.message || partnersResult.message); }
+        } catch (error) { dashboardContainer.innerHTML = `<p style="color:var(--color-danger)">Failed to load dashboard: ${error.message}</p>`; }
     }
-    function renderDashboardContent(clients, leads) {
-        const dashboard = adminModalContent.querySelector('#admin-dashboard');
-        let leadsHTML = `<div class="leads-container"><h3><span class="lang-en">New Enquiries / Leads</span><span class="lang-hi">नई पूछताछ / लीड्स</span> (${leads.length})</h3>`;
+    
+    function renderDashboardContent(clients, leads, partners) {
+        const dashboardContainer = adminModalContent.querySelector('#admin-dashboard-container');
+        
+        const tabsHTML = `
+            <div class="admin-tabs">
+                <button class="admin-tab-btn active" data-tab="leads-tab">Leads (${leads.length})</button>
+                <button class="admin-tab-btn" data-tab="clients-tab">Clients (${clients.length})</button>
+                <button class="admin-tab-btn" data-tab="partners-tab">Partners (${partners.length})</button>
+            </div>`;
+
+        let leadsHTML = `<div id="leads-tab" class="admin-tab-content active"><div class="leads-container">`;
         if (leads.length > 0) { leads.forEach(lead => { const isNew = lead.Status === 'New'; const leadDate = new Date(lead.Timestamp).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short'}); leadsHTML += `<div class="lead-card ${isNew ? 'new-lead' : ''}"><div class="lead-header"><span class="lead-name">${lead.Name}</span><select class="lead-status-select" data-timestamp="${new Date(lead.Timestamp).toISOString()}"><option value="New" ${lead.Status === 'New' ? 'selected' : ''}>New</option><option value="Contacted" ${lead.Status === 'Contacted' ? 'selected' : ''}>Contacted</option><option value="Converted" ${lead.Status === 'Converted' ? 'selected' : ''}>Converted</option><option value="Closed" ${lead.Status === 'Closed' ? 'selected' : ''}>Closed</option></select></div><div class="lead-contact"><a href="mailto:${lead.Email}">${lead.Email}</a><span class="phone-container"><a href="tel:${lead.Phone}" class="lead-phone-number">${lead.Phone}</a><button class="copy-btn" data-phone="${lead.Phone}" title="Copy Number" aria-label="Copy phone number"><i class="fas fa-copy"></i></button></span><div class="lead-date">${leadDate}</div></div><div class="lead-message"><p>${lead.Message}</p></div></div>`; }); }
         else { leadsHTML += `<p><span class="lang-en">No new leads found.</span><span class="lang-hi">कोई नई लीड नहीं मिली।</span></p>`; }
-        leadsHTML += `</div><hr style="border-color: var(--border-color); margin: 40px 0;">`;
-        let clientsHTML = `<div class="admin-actions"><h3><span class="lang-en">All Clients (${clients.length})</span><span class="lang-hi">सभी क्लाइंट (${clients.length})</span></h3><button class="btn" id="add-user-btn" style="width:auto; padding: 10px 20px;"><span class="lang-en">+ Add New Client</span><span class="lang-hi">+ नया क्लाइंट जोड़ें</span></button></div><div class="admin-table-wrapper"><table class="admin-table"><thead><tr><th><span class="lang-en">Name</span><span class="lang-hi">नाम</span></th><th><span class="lang-en">REG. ID</span><span class="lang-hi">रजि. आईडी</span></th><th><span class="lang-en">Domain</span><span class="lang-hi">डोमेन</span></th><th><span class="lang-en">Actions</span><span class="lang-hi">कार्रवाइयाँ</span></th></tr></thead><tbody>`;
-        clients.forEach(user => { clientsHTML += `<tr><td>${user.Name || ''}</td><td>${user['REG. ID'] || ''}</td><td>${user.Domain || ''}</td><td><button class="action-btn edit-btn" data-regid="${user['REG. ID']}"><span class="lang-en">Edit</span><span class="lang-hi">संपादित करें</span></button><button class="action-btn delete-btn" data-regid="${user['REG. ID']}" data-name="${user.Name}"><span class="lang-en">Delete</span><span class="lang-hi">हटाएं</span></button></td></tr>`; });
-        clientsHTML += `</tbody></table></div>`;
-        dashboard.innerHTML = `<div class="admin-dashboard">${leadsHTML}${clientsHTML}</div>`;
+        leadsHTML += `</div></div>`;
+        
+        let clientsHTML = `<div id="clients-tab" class="admin-tab-content"><div class="admin-actions"><h3><span class="lang-en">All Clients</span></h3><button class="btn" id="add-user-btn" style="width:auto; padding: 10px 20px;"><span class="lang-en">+ Add New Client</span><span class="lang-hi">+ नया क्लाइंट जोड़ें</span></button></div><div class="admin-table-wrapper"><table class="admin-table"><thead><tr><th>Name</th><th>REG. ID</th><th>Domain</th><th>Actions</th></tr></thead><tbody>`;
+        clients.forEach(user => { clientsHTML += `<tr><td>${user.Name || ''}</td><td>${user['REG. ID'] || ''}</td><td>${user.Domain || ''}</td><td><button class="action-btn edit-btn" data-regid="${user['REG. ID']}"><i class="fas fa-edit"></i></button><button class="action-btn delete-btn" data-regid="${user['REG. ID']}" data-name="${user.Name}"><i class="fas fa-trash"></i></button></td></tr>`; });
+        clientsHTML += `</tbody></table></div></div>`;
+        
+        let partnersHTML = `<div id="partners-tab" class="admin-tab-content"><div class="admin-actions"><h3><span class="lang-en">Referral Partners</span></h3><button class="btn" id="add-partner-btn" style="width:auto; padding: 10px 20px;"><span class="lang-en">+ Add New Partner</span><span class="lang-hi">+ नया पार्टनर जोड़ें</span></button></div><div class="admin-table-wrapper"><table class="admin-table"><thead><tr><th>Name</th><th>Referral ID</th><th>Phone</th><th>Actions</th></tr></thead><tbody>`;
+        partners.forEach(p => { partnersHTML += `<tr><td>${p['Partner Name'] || ''}</td><td>${p['Referral ID'] || ''}</td><td>${p['Phone'] || ''}</td><td><button class="action-btn card-btn" data-partnerid="${p['Referral ID']}"><i class="fas fa-id-card"></i></button><button class="action-btn edit-btn" data-partnerid="${p['Referral ID']}"><i class="fas fa-edit"></i></button><button class="action-btn delete-btn" data-partnerid="${p['Referral ID']}" data-name="${p['Partner Name']}"><i class="fas fa-trash"></i></button></td></tr>`; });
+        partnersHTML += `</tbody></table></div></div>`;
+
+        dashboardContainer.innerHTML = `<div class="admin-dashboard">${tabsHTML}${leadsHTML}${clientsHTML}${partnersHTML}</div>`;
         setLanguage(localStorage.getItem('language') || 'en');
+        
+        const dashboard = dashboardContainer.querySelector('.admin-dashboard');
+
+        dashboard.querySelectorAll('.admin-tab-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                dashboard.querySelector('.admin-tab-btn.active').classList.remove('active');
+                dashboard.querySelector('.admin-tab-content.active').classList.remove('active');
+                button.classList.add('active');
+                document.getElementById(button.dataset.tab).classList.add('active');
+            });
+        });
+
         dashboard.querySelectorAll('.lead-status-select').forEach(select => select.addEventListener('change', handleLeadStatusChange));
         dashboard.querySelectorAll('.copy-btn').forEach(button => button.addEventListener('click', handleCopyClick));
+        
         dashboard.querySelector('#add-user-btn').addEventListener('click', () => openEditModal());
-        dashboard.querySelectorAll('.edit-btn').forEach(btn => btn.addEventListener('click', (e) => { const userToEdit = clients.find(u => u['REG. ID'] === e.target.closest('.edit-btn').dataset.regid); openEditModal(userToEdit); }));
-        dashboard.querySelectorAll('.delete-btn').forEach(btn => btn.addEventListener('click', (e) => { const { regid, name } = e.target.closest('.delete-btn').dataset; showConfirmModal(`Are you sure you want to delete client "${name}" (${regid})?`, () => handleDelete(regid)); }));
+        dashboard.querySelectorAll('#clients-tab .edit-btn').forEach(btn => btn.addEventListener('click', (e) => { const userToEdit = clients.find(u => u['REG. ID'] === e.currentTarget.dataset.regid); openEditModal(userToEdit); }));
+        dashboard.querySelectorAll('#clients-tab .delete-btn').forEach(btn => btn.addEventListener('click', (e) => { const { regid, name } = e.currentTarget.dataset; showConfirmModal(`Are you sure you want to delete client "${name}" (${regid})? This action cannot be undone.`, () => handleDelete(regid)); }));
+        
+        dashboard.querySelector('#add-partner-btn').addEventListener('click', () => openPartnerEditModal());
+        dashboard.querySelectorAll('#partners-tab .edit-btn').forEach(btn => btn.addEventListener('click', (e) => { const partnerToEdit = partners.find(p => p['Referral ID'] === e.currentTarget.dataset.partnerid); openPartnerEditModal(partnerToEdit); }));
+        dashboard.querySelectorAll('#partners-tab .delete-btn').forEach(btn => btn.addEventListener('click', (e) => { const { partnerid, name } = e.currentTarget.dataset; showConfirmModal(`Are you sure you want to delete partner "${name}" (${partnerid})? This cannot be undone.`, () => handleDeletePartner(partnerid)); }));
+        dashboard.querySelectorAll('#partners-tab .card-btn').forEach(btn => btn.addEventListener('click', (e) => { const partnerData = partners.find(p => p['Referral ID'] === e.currentTarget.dataset.partnerid); generateDigitalCard(partnerData); }));
     }
-    function handleCopyClick(e) { const button = e.currentTarget; const phoneToCopy = button.dataset.phone; const phoneLink = button.previousElementSibling; const icon = button.querySelector('i'); if (!navigator.clipboard) { alert("Clipboard API not supported."); return; } navigator.clipboard.writeText(phoneToCopy).then(() => { phoneLink.classList.add('copied'); icon.className = 'fas fa-check'; button.style.color = 'var(--color-secondary)'; setTimeout(() => { icon.className = 'fas fa-copy'; button.style.color = ''; }, 2000); }).catch(err => { console.error('Failed to copy text: ', err); alert('Could not copy.'); }); }
+    function handleCopyClick(e) { const button = e.currentTarget; const phoneToCopy = button.dataset.phone; const phoneLink = button.previousElementSibling; const icon = button.querySelector('i'); if (!navigator.clipboard) { alert("Clipboard API not supported."); return; } navigator.clipboard.writeText(phoneToCopy).then(() => { phoneLink.classList.add('copied'); icon.className = 'fas fa-check'; button.style.color = 'var(--color-secondary)'; setTimeout(() => { icon.className = 'fas fa-copy'; button.style.color = ''; phoneLink.classList.remove('copied'); }, 2000); }).catch(err => { console.error('Failed to copy text: ', err); alert('Could not copy.'); }); }
     async function handleLeadStatusChange(e) {
         const select = e.target; const timestamp = select.dataset.timestamp; const status = select.value; select.disabled = true;
         try {
@@ -481,18 +491,275 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) { alert(`Error updating status: ${error.message}`); loadAdminDashboard(); }
         finally { select.disabled = false; }
     }
-    function openEditModal(user = null) { const modal = document.getElementById('edit-modal'); modalTitle.innerHTML = user ? `<span class="lang-en">Edit ${user.Name}</span><span class="lang-hi">${user.Name} संपादित करें</span>` : '<span class="lang-en">Add New Client</span><span class="lang-hi">नया क्लाइंट जोड़ें</span>'; let formContent = '<div class="fields-grid" style="max-height: 60vh; overflow-y: auto; padding-right: 15px;">'; ALL_HEADERS.forEach(header => { const value = user ? user[header] || '' : ''; const isReadOnly = (header === 'REG. ID' && user); formContent += `<div class="form-group"><label>${header}</label><input type="text" name="${header}" value="${value}" ${isReadOnly ? 'readonly' : ''}></div>`; }); formContent += `</div><button type="submit" class="btn" style="width:100%; margin-top:20px;">${user ? '<span class="lang-en">Save Changes</span><span class="lang-hi">बदलाव सहेजें</span>' : '<span class="lang-en">Add Client</span><span class="lang-hi">क्लाइंट जोड़ें</span>'}</button>`; editForm.innerHTML = formContent; setLanguage(localStorage.getItem('language') || 'en'); showModal(modal); }
-    editForm.addEventListener('submit', async (e) => { e.preventDefault(); const btn = editForm.querySelector('button[type="submit"]'); btn.disabled = true; const formData = new FormData(editForm); const data = Object.fromEntries(formData.entries()); const action = (modalTitle.textContent.startsWith('Edit')) ? 'editUser' : 'addUser'; try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action, data }), headers: { 'Content-Type': 'text/plain;charset=utf-8' } }); const result = await response.json(); if(result.success) { hideModal(document.getElementById('edit-modal')); showMessage(result.message, 'success', adminModalContent.querySelector('#admin-dashboard')); loadAdminDashboard(); } else { throw new Error(result.message); } } catch (error) { alert(error.message); } finally { btn.disabled = false; } });
+    function openEditModal(user = null) { const modal = document.getElementById('edit-modal'); modalTitle.innerHTML = user ? `<span class="lang-en">Edit ${user.Name}</span><span class="lang-hi">${user.Name} संपादित करें</span>` : '<span class="lang-en">Add New Client</span><span class="lang-hi">नया क्लाइंट जोड़ें</span>'; let formContent = '<div class="fields-grid" style="max-height: 60vh; overflow-y: auto; padding-right: 15px;">'; ALL_HEADERS.forEach(header => { const value = user ? user[header] || '' : ''; const isReadOnly = (header === 'REG. ID' && user); formContent += `<div class="form-group"><label>${header}</label><input type="text" name="${header}" value="${value}" ${isReadOnly ? 'readonly' : ''}></div>`; }); formContent += `</div><button type="submit" class="btn" style="width:100%; margin-top:20px;">${user ? '<span class="lang-en">Save Changes</span><span class="lang-hi">बदलाव सहेजें</span>' : '<span class="lang-en">Add Client</span><span class="lang-hi">क्लाइंट जोड़ें</span>'}</button>`; editForm.innerHTML = formContent; editForm.onsubmit = handleClientFormSubmit; setLanguage(localStorage.getItem('language') || 'en'); showModal(modal); }
+    async function handleClientFormSubmit(e) { e.preventDefault(); const btn = editForm.querySelector('button[type="submit"]'); btn.disabled = true; const formData = new FormData(editForm); const data = Object.fromEntries(formData.entries()); const action = (data['REG. ID']) ? 'editUser' : 'addUser'; try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action, data }), headers: { 'Content-Type': 'text/plain;charset=utf-8' } }); const result = await response.json(); if(result.success) { hideModal(document.getElementById('edit-modal')); showMessage(result.message, 'success', adminModalContent.querySelector('#admin-dashboard-container')); loadAdminDashboard(); } else { throw new Error(result.message); } } catch (error) { alert(error.message); } finally { btn.disabled = false; } };
     function showConfirmModal(text, onConfirm) { const modal = document.getElementById('confirm-modal'); const confirmText = document.getElementById('confirm-text'); const confirmYesBtn = document.getElementById('confirm-yes-btn'); confirmText.textContent = text; const newYesBtn = confirmYesBtn.cloneNode(true); confirmYesBtn.parentNode.replaceChild(newYesBtn, confirmYesBtn); newYesBtn.addEventListener('click', () => { onConfirm(); hideModal(modal); }); document.getElementById('confirm-no-btn').onclick = () => hideModal(modal); showModal(modal); }
-    async function handleDelete(regId) { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteUser', regId }), headers: { 'Content-Type': 'text/plain;charset=utf-8' } }); const result = await response.json(); if (result.success) { showMessage(result.message, 'success', adminModalContent.querySelector('#admin-dashboard')); loadAdminDashboard(); } else { throw new Error(result.message); } } catch (error) { showMessage(error.message, 'error', adminModalContent.querySelector('#admin-dashboard')); } }
+    async function handleDelete(regId) { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteUser', regId }), headers: { 'Content-Type': 'text/plain;charset=utf-8' } }); const result = await response.json(); if (result.success) { showMessage(result.message, 'success', adminModalContent.querySelector('#admin-dashboard-container')); loadAdminDashboard(); } else { throw new Error(result.message); } } catch (error) { showMessage(error.message, 'error', adminModalContent.querySelector('#admin-dashboard-container')); } }
     
+    // --- Partner Management Functions ---
+    function openPartnerEditModal(partner = null) {
+        const modal = document.getElementById('edit-modal');
+        modalTitle.innerHTML = partner ? `Edit Partner: ${partner['Partner Name']}` : 'Add New Partner';
+        let formContent = '<div class="form-grid">';
+
+        if (partner) {
+            formContent += `<div class="form-group"><label>Referral ID</label><input type="text" name="Referral ID" value="${partner['Referral ID']}" readonly style="background-color: var(--bg-tertiary); cursor: not-allowed;"></div>`;
+        }
+
+        PARTNER_HEADERS.forEach(header => {
+            if (header === 'Join Date' || header === 'Referral ID') return;
+
+            if (header === 'Photo URL') {
+                const existingUrl = partner ? partner[header] || '' : '';
+                formContent += `
+                    <div class="form-group full-width">
+                        <label>Partner Photo</label>
+                        <img id="partner-photo-preview" src="${existingUrl || 'https://placehold.co/100x100/1A1A2E/E0E0E0?text=Preview'}" alt="Photo Preview" style="width: 100px; height: 100px; border-radius: 8px; object-fit: cover; margin-bottom: 10px; display: block;">
+                        <input type="file" id="partner-photo-upload" accept="image/*" style="margin-bottom: 10px;">
+                        <input type="hidden" name="Photo URL" id="partner-photo-url" value="${existingUrl}">
+                        <p id="upload-status" style="font-size: 0.9rem; color: var(--color-text-muted);"></p>
+                    </div>
+                `;
+            } else {
+                const value = partner ? partner[header] || '' : '';
+                formContent += `<div class="form-group"><label>${header}</label><input type="text" name="${header}" value="${value}" required></div>`;
+            }
+        });
+
+        formContent += `</div><button type="submit" class="btn" style="width:100%;">${partner ? 'Save Changes' : 'Add Partner'}</button>`;
+        editForm.innerHTML = formContent;
+        editForm.onsubmit = handlePartnerFormSubmit;
+        
+        const photoUploadInput = document.getElementById('partner-photo-upload');
+        const photoUrlInput = document.getElementById('partner-photo-url');
+        const photoPreview = document.getElementById('partner-photo-preview');
+        const uploadStatus = document.getElementById('upload-status');
+        const submitBtn = editForm.querySelector('button[type="submit"]');
+
+        photoUploadInput.addEventListener('change', async (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const apiKey = 'f384adde734730695531aeb7a35621dd';
+
+            if (apiKey === 'YOUR_API_KEY_HERE' || apiKey === '') {
+                uploadStatus.textContent = 'Upload Failed: API Key is not set in the HTML file.';
+                uploadStatus.style.color = 'var(--color-danger)';
+                console.error("ImgBB API key is missing. Please follow the instructions in the code to add it.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('image', file);
+            uploadStatus.textContent = 'Uploading... Please wait.';
+            uploadStatus.style.color = 'var(--color-primary)';
+            submitBtn.disabled = true;
+            try {
+                const response = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
+                    method: 'POST', body: formData,
+                });
+                const result = await response.json();
+                if (result.success) {
+                    photoUrlInput.value = result.data.url;
+                    photoPreview.src = result.data.url;
+                    uploadStatus.textContent = 'Upload complete!';
+                    uploadStatus.style.color = 'var(--color-secondary)';
+                } else { throw new Error(result.error.message || 'Unknown upload error.'); }
+            } catch (error) {
+                console.error('ImgBB Upload Error:', error);
+                uploadStatus.textContent = `Upload Failed: ${error.message}. Check API key and internet.`;
+                uploadStatus.style.color = 'var(--color-danger)';
+                photoUploadInput.value = '';
+            } finally {
+                submitBtn.disabled = false;
+            }
+        });
+        showModal(modal);
+    }
+
+    async function handlePartnerFormSubmit(e) {
+        e.preventDefault();
+        const btn = editForm.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        const formData = new FormData(editForm);
+        const data = Object.fromEntries(formData.entries());
+        const action = data['Referral ID'] ? 'editPartner' : 'addPartner';
+        try {
+            const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action, data }), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
+            const result = await response.json();
+            if(result.success) {
+                hideModal(document.getElementById('edit-modal'));
+                showMessage(result.message, 'success', adminModalContent.querySelector('#admin-dashboard-container'));
+                loadAdminDashboard();
+                loadPartners(); // Refresh partners on main page too
+            } else { throw new Error(result.message); }
+        } catch (error) {
+            alert(error.message);
+        } finally {
+            btn.disabled = false;
+        }
+    }
+    async function handleDeletePartner(partnerId) {
+         try {
+            const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'deletePartner', partnerId }), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
+            const result = await response.json();
+            if (result.success) {
+                showMessage(result.message, 'success', adminModalContent.querySelector('#admin-dashboard-container'));
+                loadAdminDashboard();
+                loadPartners(); // Refresh partners on main page too
+            } else { throw new Error(result.message); }
+        } catch (error) {
+            showMessage(error.message, 'error', adminModalContent.querySelector('#admin-dashboard-container'));
+        }
+    }
+
+    function generateDigitalCard(partner) {
+        const modal = document.getElementById('info-modal');
+        const contentContainer = document.getElementById('info-modal-content');
+        
+        const referralLink = `https://promptminds.in?ref=${partner['Referral ID']}`;
+        const qrCodeURL = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(referralLink)}`;
+        
+        contentContainer.innerHTML = `
+            <div id="partner-package-content">
+                <div class="id-card-v4-wrapper">
+                    <div class="id-card-v4">
+                        <div class="card-bg-circuits"></div>
+                        <div class="card-ribbon-v4"></div>
+                        <div class="id-card-v4-content">
+                            <div class="card-header-v4">
+                                <img src="https://i.ibb.co/LXNcssHF/1000039909-removebg_preview.png" alt="Prompt Minds Logo" onerror="this.onerror=null;this.src='https://i.ibb.co/6y1Ff7b/logo-symbol-only.png';">
+                                <h2>PROMPT MINDS</h2>
+                                <p>Founder: ABHINAV KUMAR</p>
+                            </div>
+
+                            <div class="photo-frame-v4">
+                                <img src="${partner['Photo URL'] || 'https://i.imgur.com/7D7g2cm.png'}" alt="Partner Photo" onerror="this.onerror=null;this.src='https://i.imgur.com/7D7g2cm.png';">
+                            </div>
+                            
+                            <h1 class="partner-name-v4">${partner['Partner Name']}</h1>
+                            <div class="partner-ref-id-v4">${partner['Referral ID']}</div>
+                            <p class="partner-title-v4">Referral Partner</p>
+
+                            <div class="contact-info-v4">
+                                <div class="contact-item-v4"><i class="fas fa-envelope fa-fw"></i> <span>business.newviral@gmail.com</span></div>
+                                <div class="contact-item-v4"><i class="fas fa-phone fa-fw"></i> <span>${partner['Phone']}</span></div>
+                                <div class="contact-item-v4"><i class="fas fa-globe fa-fw"></i> <span>www.promptminds.in</span></div>
+                            </div>
+
+                            <div class="qr-section-v4">
+                                <img src="${qrCodeURL}" alt="QR Code">
+                                <p>Scan to Verify Partner & Get Your Referral Link</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer-v4">
+                        Prompt Minds <i class="fas fa-circle" style="font-size: 6px;"></i> Official Partner Network
+                    </div>
+                </div>
+            </div>
+            <div class="digital-card-actions">
+                <button id="download-card-btn" class="btn">Download Package (PNG)</button>
+            </div>`;
+
+        document.getElementById('download-card-btn').addEventListener('click', () => downloadPartnerPackageAsImage(partner));
+        showModal(modal);
+    }
+
+    function getAgreementTextAsHTML(partner) {
+        return `
+            <div class="agreement-for-image">
+                <h3>Referral Partnership Agreement</h3>
+                <div class="agreement-details">
+                    <p><strong>Company:</strong> Prompt Minds (www.promptminds.in)</p>
+                    <p><strong>Partner:</strong> ${partner['Partner Name']}</p>
+                    <p><strong>Referral ID:</strong> ${partner['Referral ID']}</p>
+                    <p><strong>Date Issued:</strong> ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                </div>
+                <h4>Terms & Conditions:</h4>
+                <ol>
+                    <li><strong>Joining Fee:</strong>
+                        <p>A one-time, refundable security fee of ₹1000 is required to activate the partnership. This fee is fully refunded after your first successful client referral.</p>
+                    </li>
+                    <li><strong>Commission Structure:</strong>
+                        <p>You will earn a <strong>10% commission</strong> on the total project value for every client you refer who signs up for our services.</p>
+                    </li>
+                    <li><strong>Partnership Validity (Lifetime Condition):</strong>
+                        <p>To convert this into a lifetime partnership, you must refer at least <strong>one (1) client within the first 50 days</strong> of joining. If no client is referred within this period, the partnership will be considered inactive, and the ₹1000 security fee will be forfeited and become non-refundable.</p>
+                    </li>
+                    <li><strong>Payment Method:</strong>
+                        <p>Commissions are paid directly via UPI or Bank Transfer within 48 hours of Prompt Minds receiving payment from the client.</p>
+                    </li>
+                    <li><strong>Partner Responsibility:</strong>
+                        <p>Your role is to connect potential clients with Prompt Minds. All project discussions, execution, and client management will be handled entirely by our team.</p>
+                    </li>
+                </ol>
+            </div>`;
+    }
+
+    async function downloadPartnerPackageAsImage(partner) {
+        const downloadBtn = document.getElementById('download-card-btn');
+        if (downloadBtn) { downloadBtn.disabled = true; downloadBtn.innerHTML = 'Generating...'; }
+
+        // Create a temporary container for the combined content
+        const packageContainer = document.createElement('div');
+        packageContainer.id = 'temp-package-container';
+        
+        // Style the container for rendering
+        Object.assign(packageContainer.style, {
+            position: 'absolute',
+            left: '-9999px',
+            top: '0',
+            width: '800px', // A good width for high-quality capture
+            padding: '25px',
+            background: 'white',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '20px'
+        });
+        
+        // Get the card and agreement HTML
+        const cardHTML = document.querySelector('.id-card-v4-wrapper').outerHTML;
+        const agreementHTML = getAgreementTextAsHTML(partner);
+
+        packageContainer.innerHTML = cardHTML + agreementHTML;
+        
+        // Temporarily append to the body to render it
+        document.body.appendChild(packageContainer);
+        
+        try {
+            // Use html2canvas to capture the combined container
+            const canvas = await html2canvas(packageContainer, {
+                scale: 2, // Higher scale for better quality
+                useCORS: true,
+                backgroundColor: '#ffffff'
+            });
+            
+            // Trigger download
+            const link = document.createElement('a');
+            link.download = `PromptMinds_Partner_Package_${partner['Referral ID']}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+
+        } catch (error) {
+            console.error("Image generation failed:", error);
+            alert("Could not generate the image. Please try again.");
+        } finally {
+            // Clean up: remove the temporary container
+            document.body.removeChild(packageContainer);
+            if (downloadBtn) { 
+                downloadBtn.disabled = false; 
+                downloadBtn.innerHTML = 'Download Package (PNG)';
+            }
+        }
+    }
+
+
     // --- Welcome Screen & Voice Assistant ---
     const getStartedBtn = document.getElementById('get-started-btn');
     const welcomeScreen = document.getElementById('welcome-screen');
     
-    const initialThemeIsDark = document.documentElement.dataset.theme === 'dark';
-    startWelcomeVanta(initialThemeIsDark);
-
     getStartedBtn.addEventListener('click', () => {
         welcomeScreen.style.opacity = '0';
         welcomeScreen.style.visibility = 'hidden';
@@ -503,16 +770,11 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const currentTheme = localStorage.getItem('theme') || 'dark';
             setTheme(currentTheme);
-            
-            startVantaBackground(currentTheme === 'dark');
+
+            initParticles(); // Initialize lightweight background
             
             typewriterEffect();
             toggleSpeech(); 
-
-            if(welcomeVantaEffect) {
-                welcomeVantaEffect.destroy();
-                welcomeVantaEffect = null;
-            }
         }, 600); 
         setTimeout(() => welcomeScreen && welcomeScreen.remove(), 1000);
     });
@@ -637,7 +899,7 @@ document.addEventListener('DOMContentLoaded', () => {
             "aapka naam|who are you|tum kon ho": "Mera naam Mindy hai. Main Prompt Minds ki AI assistant hoon, jo aapke sawalon ka jawab dene ke liye yahan hai.",
             "prompt minds kya hai|company kya karti hai": "Prompt Minds ek web design aur AI solutions company hai. Hum businesses ke liye high-quality, professional websites banate hain jo unhe grow karne mein madad karti hain.",
             "founder kon hai|owner kon hai": "Prompt Minds ke founder Abhinav Kumar hain. Woh khud clients se direct baat karke unke project ko samajhte hain.",
-            "thank you|dhanyavad|shukriya": "Aapka swagat hai! Aur koi sawaal ho toh zaroor poochein.", "ok|theek hai": "Great! Aur kuch janna chahenge aap?",
+            "thank you|dhanyavad|shukriya": "Aapka swagat hai! Aur koi sawaal ho toh zoor poochein.", "ok|theek hai": "Great! Aur kuch janna chahenge aap?",
             "payment|price|cost|kitna lagega|kitne paise|charge|kharcha|rate": "Pricing ke baare mein detail se baat karne ke liye, please neeche diye gaye contact form ko bharein ya business.newviral@gmail.com par email karein. Hamare founder, Abhinav Kumar, aapse direct call par baat karke aapke project ke hisaab se best price batayenge.",
             "payment terms|paise kaise dene hai": "Hum 50% advance payment lete hain project shuru karne ke liye. Baaki 50% payment tab dena hota hai jab aapki website par 500 visitors aa jaate hain ya 2 mahine poore ho jaate hain, jo bhi pehle ho.",
             "advance kitna hai": "Project shuru karne ke liye 50% advance payment ki zaroorat hoti hai.",
@@ -672,14 +934,14 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         'terms': {
             en: `<h1>Terms of Service for Prompt Minds</h1><p><em>Last Updated: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</em></p><h2>1. Acceptance of Terms</h2><p>By using the services of Prompt Minds ("Company," "we," "us," or "our"), you (the "Client," "you," or "your") agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, please do not use our services. These Terms constitute a legally binding agreement between you and Prompt Minds regarding your access to and use of our website development and related services.</p><h2>2. Services Provided</h2><p>Prompt Minds agrees to provide the Client with professional website design and development services. The scope of services is detailed in the "Website Design Service Agreement" section of our website and includes, but is not limited to:</p><ul><li>Custom website design on the Blogger platform.</li><li>Registration and setup of a .com custom domain name.</li><li>Development of custom tools and features as agreed upon.</li><li>Creation of custom graphics and animations.</li><li>Comprehensive Search Engine Optimization (SEO) setup.</li><li>Verification with Google Search Console.</li><li>Custom logo design.</li><li>Assistance in applying for ad platforms like Google AdSense.</li></ul><h2>3. Client Responsibilities</h2><p>To ensure a smooth and timely project delivery, the Client agrees to:</p><ul><li>Provide all necessary website content (text, images, brand details) in a timely manner.</li><li>Ensure that all content provided is original or that the Client holds the legal rights and copyright to use it. The Client indemnifies Prompt Minds against any claims of copyright infringement arising from the content provided by the Client.</li><li>Provide timely feedback and approvals as required during the project lifecycle.</li><li>Communicate any changes or new requirements clearly and promptly.</li></ul><h2>4. Payment Terms</h2><p>Our payment structure is designed to be result-oriented:</p><ul><li>An advance payment of 50% of the total project cost is required to commence work. This payment is non-refundable once the project has started.</li><li>The final 50% payment is due upon whichever of two conditions is met first: (a) when the website has received at least 500 visitors, or (b) two months after the project start date.</li><li>All payments are to be made through the methods specified by Prompt Minds. Failure to make payments on time may result in work stoppage or suspension of services.</li></ul><h2>5. Intellectual Property and Ownership</h2><p>Upon receipt of full and final payment, the Client will be the sole owner of the website, domain name, and all associated deliverables. All rights, title, and interest will be transferred to the Client. Prompt Minds reserves the right to display the completed project in our portfolio and marketing materials as an example of our work. This serves as a promotion for both our services and the Client's website.</p><h2>6. Term and Termination</h2><ul><li><strong>Cancellation by Client:</strong> If the Client chooses to cancel the project after work has begun, the 50% advance payment will be forfeited to cover the costs of the domain, resources, and initial work performed.</li><li><strong>Termination by Prompt Minds:</strong> We reserve the right to terminate the project if the Client fails to adhere to these terms, including failure to provide necessary content or payments.</li><li><strong>Refunds:</strong> If Prompt Minds fails to deliver the project within the agreed-upon timeline (typically 7 working days, subject to the Client providing content on time), the Client is entitled to a full refund of the advance payment.</li></ul><h2>7. Disclaimer of Warranties and Limitation of Liability</h2><p>While we strive for excellence, our services are provided on an "as is" basis. We do not warrant that your website will be error-free or that access to it will be continuous or uninterrupted. We do not guarantee approval for ad platforms like Google AdSense, as this is at the sole discretion of the respective platform. In no event shall Prompt Minds be liable for any direct, indirect, incidental, or consequential damages resulting from the use or inability to use our services.</p><h2>8. Governing Law</h2><p>These Terms shall be governed by and construed in accordance with the laws of India, without regard to its conflict of law principles. Any dispute arising under or in connection with these Terms shall be subject to the exclusive jurisdiction of the courts located in Patna, Bihar, India.</p><h2>9. Contact Us</h2><p>For any questions or clarifications regarding these Terms of Service, please contact us at <a href="mailto:business.newviral@gmail.com">business.newviral@gmail.com</a>.</p>`,
-            hi: `<h1>प्रॉम्प्ट माइंड्स के लिए सेवा की शर्तें</h1><p><em>अंतिम अपडेट: ${new Date().toLocaleDateString('hi-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</em></p><h2>1. शर्तों की स्वीकृति</h2><p>प्रॉम्प्ट माइंड्स ("कंपनी," "हम," "हमें," या "हमारा") की सेवाओं का उपयोग करके, आप ("क्लाइंट," "आप," या "आपका") इन सेवा की शर्तों ("शर्तें") से बंधे होने के लिए सहमत हैं। यदि आप इन शर्तों से सहमत नहीं हैं, तो कृपया हमारी सेवाओं का उपयोग न करें। ये शर्तें आपके और प्रॉम्प्ट माइंड्स के बीच हमारी वेबसाइट विकास और संबंधित सेवाओं तक आपकी पहुंच और उपयोग के संबंध में कानूनी रूप से बाध्यकारी समझौता हैं।</p><h2>2. प्रदान की जाने वाली सेवाएँ</h2><p>प्रॉम्प्ट माइंड्स क्लाइंट को पेशेवर वेबसाइट डिजाइन और विकास सेवाएँ प्रदान करने के लिए सहमत है। सेवाओं का दायरा हमारी वेबसाइट के "वेबसाइट डिज़ाइन सेवा समझौता" खंड में विस्तृत है और इसमें शामिल हैं, लेकिन यह इन्हीं तक सीमित नहीं है:</p><ul><li>ब्लॉगर प्लेटफॉर्म पर कस्टम वेबसाइट डिजाइन।</li><li>.com कस्टम डोमेन नाम का पंजीकरण और सेटअप।</li><li>सहमति के अनुसार कस्टम टूल और सुविधाओं का विकास।</li><li>कस्टम ग्राफिक्स और एनिमेशन का निर्माण।</li><li>व्यापक खोज इंजन अनुकूलन (एसईओ) सेटअप।</li><li>गूगल सर्च कंसोल के साथ सत्यापन।</li><li>कस्टम लोगो डिजाइन।</li><li>गूगल एडसेंस जैसे विज्ञापन प्लेटफार्मों के लिए आवेदन करने में सहायता।</li></ul><h2>3. क्लाइंट की जिम्मेदारियाँ</h2><p>एक सहज और समय पर प्रोजेक्ट डिलीवरी सुनिश्चित करने के लिए, क्लाइंट सहमत है:</p><ul><li>सभी आवश्यक वेबसाइट सामग्री (टेक्स्ट, चित्र, ब्रांड विवरण) समय पर प्रदान करना।</li><li>यह सुनिश्चित करना कि प्रदान की गई सभी सामग्री मूल है या क्लाइंट के पास इसका उपयोग करने का कानूनी अधिकार और कॉपीराइट है। क्लाइंट द्वारा प्रदान की गई सामग्री से उत्पन्न होने वाले किसी भी कॉपीराइट उल्लंघन के दावों के खिलाफ क्लाइंट प्रॉम्प्ट माइंड्स को क्षतिपूर्ति करता है।</li><li>प्रोजेक्ट जीवनचक्र के दौरान आवश्यकतानुसार समय पर प्रतिक्रिया और अनुमोदन प्रदान करना।</li><li>किसी भी परिवर्तन या नई आवश्यकताओं को स्पष्ट और तुरंत सूचित करना।</li></ul><h2>4. भुगतान की शर्तें</h2><p>हमारी भुगतान संरचना परिणाम-उन्मुख होने के लिए डिज़ाइन की गई है:</p><ul><li>काम शुरू करने के लिए कुल प्रोजेक्ट लागत का 50% अग्रिम भुगतान आवश्यक है। प्रोजेक्ट शुरू होने के बाद यह भुगतान गैर-वापसी योग्य है।</li><li>अंतिम 50% भुगतान दो शर्तों में से जो भी पहले हो, पर देय है: (क) जब वेबसाइट पर कम से कम 500 विज़िटर आ गए हों, या (ख) प्रोजेक्ट शुरू होने की तारीख से दो महीने बाद।</li><li>सभी भुगतान प्रॉम्प्ट माइंड्स द्वारा निर्दिष्ट तरीकों के माध्यम से किए जाने हैं। समय पर भुगतान करने में विफलता के परिणामस्वरूप काम रुक सकता है या सेवाएँ निलंबित हो सकती हैं।</li></ul><h2>5. बौद्धिक संपदा और स्वामित्व</h2><p>पूर्ण और अंतिम भुगतान प्राप्त होने पर, क्लाइंट वेबसाइट, डोमेन नाम और सभी संबंधित डिलिवरेबल्स का एकमात्र मालिक होगा। सभी अधिकार, शीर्षक और हित क्लाइंट को हस्तांतरित कर दिए जाएंगे। प्रॉम्प्ट माइंड्स हमारे काम के एक उदाहरण के रूप में हमारे पोर्टफोलियो और विपणन सामग्री में पूर्ण प्रोजेक्ट को प्रदर्शित करने का अधिकार सुरक्षित रखता है। यह हमारी सेवाओं और क्लाइंट की वेबसाइट दोनों के प्रचार के रूप में कार्य करता है।</p><h2>6. अवधि और समाप्ति</h2><ul><li><strong>क्लाइंट द्वारा रद्दीकरण:</strong> यदि क्लाइंट काम शुरू होने के बाद प्रोजेक्ट को रद्द करने का विकल्प चुनता है, तो डोमेन, संसाधनों और किए गए प्रारंभिक कार्य की लागत को कवर करने के लिए 50% अग्रिम भुगतान जब्त कर लिया जाएगा।</li><li><strong>प्रॉम्प्ट माइंड्स द्वारा समाप्ति:</strong> यदि क्लाइंट इन शर्तों का पालन करने में विफल रहता है, जिसमें आवश्यक सामग्री या भुगतान प्रदान करने में विफलता शामिल है, तो हम प्रोजेक्ट को समाप्त करने का अधिकार सुरक्षित रखते हैं।</li><li><strong>धनवापसी:</strong> यदि प्रॉम्प्ट माइंड्स सहमत समय-सीमा (आमतौर पर 7 कार्य दिवस, क्लाइंट द्वारा समय पर सामग्री प्रदान करने के अधीन) के भीतर प्रोजेक्ट देने में विफल रहता है, तो क्लाइंट अग्रिम भुगतान की पूरी वापसी का हकदार है।</li></ul><h2>7. वारंटियों का अस्वीकरण और देयता की सीमा</h2><p>जबकि हम उत्कृष्टता के लिए प्रयास करते हैं, हमारी सेवाएँ "जैसा है" के आधार पर प्रदान की जाती हैं। हम यह गारंटी नहीं देते कि आपकी वेबसाइट त्रुटि-मुक्त होगी या उस तक पहुंच निरंतर या निर्बाध होगी। हम गूगल एडसेंस जैसे विज्ञापन प्लेटफार्मों के लिए अनुमोदन की गारंटी नहीं दे सकते, क्योंकि यह संबंधित प्लेटफॉर्म के एकमात्र विवेक पर है। किसी भी स्थिति में प्रॉम्प्ट माइंड्स हमारी सेवाओं का उपयोग करने या उपयोग करने में असमर्थता के परिणामस्वरूप होने वाले किसी भी प्रत्यक्ष, अप्रत्यक्ष, आकस्मिक, या परिणामी नुकसान के लिए उत्तरदायी नहीं होगा।</p><h2>8. शासी कानून</h2><p>ये शर्तें भारत के कानूनों के अनुसार शासित और व्याख्या की जाएंगी, इसके कानून के सिद्धांतों के टकराव की परवाह किए बिना। इन शर्तों के तहत या इसके संबंध में उत्पन्न होने वाले किसी भी विवाद को पटना, बिहार, भारत में स्थित अदालतों के अनन्य क्षेत्राधिकार के अधीन किया जाएगा।</p><h2>9. हमसे संपर्क करें</h2><p>इन सेवा की शर्तों के संबंध में किसी भी प्रश्न या स्पष्टीकरण के लिए, कृपया हमसे <a href="mailto:business.newviral@gmail.com">business.newviral@gmail.com</a> पर संपर्क करें।</p>`
+            hi: `<h1>प्रॉम्प्ट माइंड्स के लिए सेवा की शर्तें</h1><p><em>अंतिम अपडेट: ${new Date().toLocaleDateString('hi-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</em></p><h2>1. शर्तों की स्वीकृति</h2><p>प्रॉम्प्ट माइंड्स ("कंपनी," "हम," "हमें," या "हमारा") की सेवाओं का उपयोग करके, आप ("क्लाइंट," "आप," या "आपका") इन सेवा की शर्तों ("शर्तें") से बंधे होने के लिए सहमत हैं। यदि आप इन शर्तों से सहमत नहीं हैं, तो कृपया हमारी सेवाओं का उपयोग न करें। ये शर्तें आपके और प्रॉम्प्ट माइंड्स के बीच हमारी वेबसाइट विकास और संबंधित सेवाओं तक आपकी पहुंच और उपयोग के संबंध में कानूनी रूप से बाध्यकारी समझौता हैं।</p><h2>2. प्रदान की जाने वाली सेवाएँ</h2><p>प्रॉम्प्ट माइंड्स क्लाइंट को पेशेवर वेबसाइट डिजाइन और विकास सेवाएँ प्रदान करने के लिए सहमत है। सेवाओं का दायरा हमारी वेबसाइट के "वेबसाइट डिज़ाइन सेवा समझौता" खंड में विस्तृत है और इसमें शामिल हैं, लेकिन यह इन्हीं तक सीमित नहीं है:</p><ul><li>ब्लॉगर प्लेटफॉर्म पर कस्टम वेबसाइट डिजाइन।</li><li>.com कस्टम डोमेन नाम का पंजीकरण और सेटअप।</li><li>सहमति के अनुसार कस्टम टूल और सुविधाओं का विकास।</li><li>कस्टम ग्राफिक्स और एनिमेशन का निर्माण।</li><li>व्यापक खोज इंजन अनुकूलन (एसईओ) सेटअप।</li><li>गूगल सर्च कंसोल के साथ सत्यापन।</li><li>कस्टम लोगो डिजाइन।</li><li>गूगल एडसेंस जैसे विज्ञापन प्लेटफार्मों के लिए आवेदन करने में सहायता।</li></ul><h2>3. क्लाइंट की जिम्मेदारियाँ</h2><p>एक सहज और समय पर प्रोजेक्ट डिलीवरी सुनिश्चित करने के लिए, क्लाइंट सहमत है:</p><ul><li>सभी आवश्यक वेबसाइट सामग्री (टेक्स्ट, चित्र, ब्रांड विवरण) समय पर प्रदान करना।</li><li>यह सुनिश्चित करना कि प्रदान की गई सभी सामग्री मूल है या क्लाइंट के पास इसका उपयोग करने का कानूनी अधिकार और कॉपीराइट है। क्लाइंट द्वारा प्रदान की गई सामग्री से उत्पन्न होने वाले किसी भी कॉपीराइट उल्लंघन के दावों के खिलाफ क्लाइंट प्रॉम्प्ट माइंड्स को क्षतिपूर्ति करता है।</li><li>प्रोजेक्ट जीवनचक्र के दौरान आवश्यकतानुसार समय पर प्रतिक्रिया और अनुमोदन प्रदान करना।</li><li>किसी भी परिवर्तन या नई आवश्यकताओं को स्पष्ट और तुरंत सूचित करना।</li></ul><h2>4. भुगतान की शर्तें</h2><p>हमारी भुगतान संरचना परिणाम-उन्मुख होने के लिए डिज़ाइन की गई है:</p><ul><li>काम शुरू करने के लिए कुल प्रोजेक्ट लागत का 50% अग्रिम भुगतान आवश्यक है। प्रोजेक्ट शुरू होने के बाद यह भुगतान गैर-वापसी योग्य है।</li><li>अंतिम 50% भुगतान दो शर्तों में से जो भी पहले हो, पर देय है: (क) जब वेबसाइट पर कम से कम 500 विज़िटर आ गए हों, या (ख) प्रोजेक्ट शुरू होने की तारीख से दो महीने बाद।</li><li>सभी भुगतान प्रॉम्प्ट माइंड्स द्वारा निर्दिष्ट तरीकों के माध्यम से किए जाने हैं। समय पर भुगतान करने में विफलता के परिणामस्वरूप काम रुक सकता है या सेवाएँ निलंबित हो सकती हैं।</li></ul><h2>5. बौद्धिक संपदा और स्वामित्व</h2><p>पूर्ण और अंतिम भुगतान प्राप्त होने पर, क्लाइंट वेबसाइट, डोमेन नाम और सभी संबंधित डिलिवरेबल्स का एकमात्र मालिक होगा। सभी अधिकार, शीर्षक और हित क्लाइंट को हस्तांतरित कर दिए जाएंगे। प्रॉम्प्ट माइंड्स हमारे काम के एक उदाहरण के रूप में हमारे पोर्टफोलियो और विपणन सामग्री में पूर्ण प्रोजेक्ट को प्रदर्शित करने का अधिकार सुरक्षित रखता है। यह हमारी सेवाओं और क्लाइंट की वेबसाइट दोनों के प्रचार के रूप में कार्य करता है।</p><h2>6. अवधि और समाप्ति</h2><ul><li><strong>क्लाइंट द्वारा रद्दीकरण:</strong> यदि क्लाइंट काम शुरू होने के बाद प्रोजेक्ट को रद्द करने का विकल्प चुनता है, तो डोमेन, संसाधनों और किए गए प्रारंभिक कार्य की लागत को कवर करने के लिए 50% अग्रिम भुगतान जब्त कर लिया जाएगा।</li><li><strong>प्रॉम्प्ट माइंड्स द्वारा समाप्ति:</strong> यदि क्लाइंट इन शर्तों का पालन करने में विफल रहता है, जिसमें आवश्यक सामग्री या भुगतान प्रदान करने में विफलता शामिल है, तो हम प्रोजेक्ट को समाप्त करने का अधिकार सुरक्षित रखते हैं।</li><li><strong>धनवापसी:</strong> यदि प्रॉम्प्ट माइंड्स सहमत समय-सीमा (आमतौर पर 7 कार्य दिवस, क्लाइंट द्वारा समय पर सामग्री प्रदान करने के अधीन) के भीतर प्रोजेक्ट देने में विफल रहता है, तो क्लाइंट अग्रिम भुगतान की पूरी वापसी का हकदार है।</li></ul><h2>7. वारंटियों का अस्वीकरण और देयता की सीमा</h2><p>जबकि हम उत्कृष्टता के लिए प्रयास करते हैं, हमारी सेवाएँ "जैसा है" के आधार पर प्रदान की जाती हैं। हम यह गारंटी नहीं देते कि आपकी वेबसाइट त्रुटि-मुक्त होगी या उस तक पहुंच निरंतर या निर्बाध होगी। हम गूगल एडसेंस जैसे विज्ञापन प्लेटफार्मों के लिए अनुमोदन की गारंटी नहीं दे सकते, क्योंकि यह संबंधित प्लेटफॉर्म के एकमात्र विवेक पर है। किसी भी स्थिति में प्रॉम्प्ट माइंड्स हमारी सेवाओं का उपयोग करने या उपयोग करने में असमर्थता के परिणामस्वरूप होने वाले किसी भी प्रत्यक्ष, अप्रत्यक्ष, आकस्मिक, या परिणामी नुकसान के लिए उत्तरदायी नहीं होगा।</p></ul><h2>8. शासी कानून</h2><p>ये शर्तें भारत के कानूनों के अनुसार शासित और व्याख्या की जाएंगी, इसके कानून के सिद्धांतों के टकराव की परवाह किए बिना। इन शर्तों के तहत या इसके संबंध में उत्पन्न होने वाले किसी भी विवाद को पटना, बिहार, भारत में स्थित अदालतों के अनष्य क्षेत्राधिकार के अधीन किया जाएगा।</p><h2>9. हमसे संपर्क करें</h2><p>इन सेवा की शर्तों के संबंध में किसी भी प्रश्न या स्पष्टीकरण के लिए, कृपया हमसे <a href="mailto:business.newviral@gmail.com">business.newviral@gmail.com</a> पर संपर्क करें।</p>`
         }
     };
     function loadPageContent(pageName, containerId) {
         const container = document.getElementById(containerId);
         const currentLang = localStorage.getItem('language') || 'en';
         if (pageContents[pageName] && pageContents[pageName][currentLang]) {
-            container.innerHTML = pageContents[pageName][currentLang];
+            container.innerHTML = `<div class="page-content">${pageContents[pageName][currentLang]}</div>`;
         } else {
             container.innerHTML = `<p>Content not available.</p>`;
         }
@@ -693,8 +955,39 @@ document.addEventListener('DOMContentLoaded', () => {
             showModal(infoModal);
         });
     });
+
+    // Function to load partners on the public page
+    async function loadPartners() {
+        const grid = document.getElementById('partners-grid');
+        grid.innerHTML = '<p>Loading partners...</p>';
+        try {
+            const response = await fetch(`${SCRIPT_URL}?action=getPartners`);
+            const result = await response.json();
+            if (result.success && result.data.length > 0) {
+                grid.innerHTML = ''; // Clear loading message
+                result.data.forEach(partner => {
+                    const card = document.createElement('div');
+                    card.className = 'partner-card';
+                    card.setAttribute('data-aos', 'fade-up');
+                    card.innerHTML = `
+                        <img src="${partner['Photo URL'] || 'https://placehold.co/100x100/1A1A2E/E0E0E0?text=Partner'}" alt="${partner['Partner Name']}" onerror="this.onerror=null;this.src='https://placehold.co/100x100/1A1A2E/E0E0E0?text=Partner';">
+                        <h3>${partner['Partner Name']}</h3>
+                        <div class="ref-id">${partner['Referral ID']}</div>
+                    `;
+                    grid.appendChild(card);
+                });
+            } else {
+                grid.innerHTML = '<p>No partners to display at the moment.</p>';
+            }
+        } catch (error) {
+            console.error("Failed to load partners:", error);
+            grid.innerHTML = '<p>Could not load partners. Please try again later.</p>';
+        }
+    }
     
     // --- INITIAL LOAD ---
+    const currentTheme = localStorage.getItem('theme') || 'dark';
+    setTheme(currentTheme);
     loadReviews();
-
+    loadPartners();
 });
