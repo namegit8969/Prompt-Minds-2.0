@@ -7,7 +7,7 @@
     <!-- SEO Meta Tags - UPDATED -->
     <title>Prompt Minds - Custom Web Design & AI Solutions in India</title>
     <meta name="description" content="Prompt Minds (promptminds.in) offers professional web design, development, and AI-powered solutions. We build high-performance websites with a focus on SEO, custom tools, and brand growth for businesses in India and beyond.">
-    <meta name="keywords" content="web design India, website development India, AI solutions, SEO services, custom website, prompt minds, Abhinav Kumar, professional website, small business website, promptminds.in">
+    <meta name="keywords" content="web design India, website development India, AI solutions, SEO services, custom website, prompt minds, Abhinav Kumar, professional website, small business website, promptminds.in, referral partners">
     <meta name="author" content="Prompt Minds">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://promptminds.in">
@@ -26,24 +26,20 @@
     <meta property="twitter:description" content="We build high-performance websites with a focus on SEO, custom tools, and brand growth.">
     <meta property="twitter:image" content="https://i.ibb.co/LXNcssHF/1000039909-removebg_preview.png">
 
+    <!-- External Fonts and Libraries -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Lora:wght@400;500&display=swap" rel="stylesheet">
-    
-    <!-- External libraries for functionality -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.birds.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-
-    <!-- ===> LINK TO YOUR CSS FILE <=== -->
+    
+    <!-- Local Stylesheet -->
     <link rel="stylesheet" href="style.css">
 
-    <!-- Structured Data (Schema Markup for SEO) - FULLY OPTIMIZED -->
+    <!-- Structured Data (Schema Markup for SEO) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -97,12 +93,9 @@
 </head>
 <body>
 
-    <!-- NEW: Custom Cursor HTML -->
-    <div class="cursor-dot"></div>
-    <div class="cursor-outline"></div>
+    <div id="particles-js"></div>
 
     <div id="welcome-screen">
-        <canvas id="welcome-canvas"></canvas>
         <div class="welcome-content">
             <img src="https://i.ibb.co/LXNcssHF/1000039909-removebg_preview.png" alt="Prompt Minds Logo" class="welcome-logo" onerror="this.onerror=null;this.src='https://placehold.co/150x150/0a0a14/E0E0E0?text=PM';">
             <h1 class="welcome-title"><span class="lang-en">Welcome to Prompt Minds</span><span class="lang-hi" style="display:none;">प्रॉम्प्ट माइंड्स में आपका स्वागत है</span></h1>
@@ -110,8 +103,6 @@
             <button id="get-started-btn" class="btn"><i class="fas fa-play"></i> <span class="lang-en">Get Started & Listen</span><span class="lang-hi" style="display:none;">शुरू करें और सुनें</span></button>
         </div>
     </div>
-
-    <div id="dynamic-background"></div>
 
     <header>
         <div class="container header-container">
@@ -127,6 +118,7 @@
                     <ul>
                         <li><a href="#home"><span class="lang-en">Home</span><span class="lang-hi" style="display:none;">होम</span></a></li>
                         <li><a href="#about"><span class="lang-en">About</span><span class="lang-hi" style="display:none;">हमारे बारे में</span></a></li>
+                        <li><a href="#partners"><span class="lang-en">Partners</span><span class="lang-hi" style="display:none;">पार्टनर्स</span></a></li>
                         <li><a href="#contact"><span class="lang-en">Contact</span><span class="lang-hi" style="display:none;">संपर्क</span></a></li>
                         <li class="dropdown">
                             <button>
@@ -232,7 +224,7 @@
             </div>
         </section>
 
-        <!-- WHAT YOU'LL GET SECTION (NEW) -->
+        <!-- WHAT YOU'LL GET SECTION -->
         <section id="features">
             <div class="container">
                 <h2 class="section-title" data-aos="zoom-in">
@@ -303,6 +295,23 @@
             </div>
         </section>
 
+        <!-- OUR PARTNERS SECTION -->
+        <section id="partners">
+            <div class="container">
+                <h2 class="section-title" data-aos="zoom-in">
+                    <span class="lang-en">Our Referral Partners</span>
+                    <span class="lang-hi" style="display:none;">हमारे रेफरल पार्टनर्स</span>
+                </h2>
+                <p class="section-subtitle" data-aos="zoom-in" data-aos-delay="100">
+                    <span class="lang-en">Meet the valued partners who collaborate with us to build a stronger digital ecosystem.</span>
+                    <span class="lang-hi" style="display:none;">मिलिए उन मूल्यवान भागीदारों से जो एक मजबूत डिजिटल इकोसिस्टम बनाने के लिए हमारे साथ सहयोग करते हैं।</span>
+                </p>
+                <div id="partners-grid" class="card-grid">
+                    <!-- Partner cards will be dynamically inserted here -->
+                </div>
+            </div>
+        </section>
+
         <section id="contact">
             <div class="container">
                 <h2 class="section-title" data-aos="zoom-in"><span class="lang-en">Let's Build Your Website</span><span class="lang-hi" style="display:none;">आइए आपकी वेबसाइट बनाएं</span></h2>
@@ -310,33 +319,44 @@
                     <span class="lang-en">If you want a high-quality website, share your details in the form below. The founder of Prompt Minds, Abhinav Kumar, will contact you directly for a call.</span>
                     <span class="lang-hi" style="display:none;">अगर आप एक हाई-क्वालिटी वेबसाइट बनवाना चाहते हैं, तो नीचे दिए गए फॉर्म में अपनी डिटेल्स शेयर करें। प्रॉम्प्ट माइंड्स के फाउंडर, अभिनव कुमार, आपसे डायरेक्ट कॉल पर बात करेंगे।</span>
                 </p>
+
                 <form id="contact-form" class="form-container" data-aos="fade-up" data-aos-delay="200">
+                    <input type="hidden" id="referred-by-input" name="referred_by" value="">
                     <div id="contact-form-message-area"></div>
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="contact-name"><span class="lang-en">Your Name</span><span class="lang-hi" style="display:none;">आपका नाम</span></label>
                             <div class="input-wrapper">
-                                <input type="text" id="contact-name" name="name" required>
                                 <i class="fas fa-user input-icon"></i>
+                                <input type="text" id="contact-name" name="name" required>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="contact-email"><span class="lang-en">Your Email</span><span class="lang-hi" style="display:none;">आपका ईमेल</span></label>
                             <div class="input-wrapper">
-                                <input type="email" id="contact-email" name="email" required>
                                 <i class="fas fa-envelope input-icon"></i>
+                                <input type="email" id="contact-email" name="email" required>
                             </div>
                         </div>
                         <div class="form-group full-width">
                             <label for="contact-phone"><span class="lang-en">Phone Number</span><span class="lang-hi" style="display:none;">फ़ोन नंबर</span></label>
                             <div class="input-wrapper">
-                                <input type="tel" id="contact-phone" name="phone" required>
                                 <i class="fas fa-phone input-icon"></i>
+                                <input type="tel" id="contact-phone" name="phone" required>
                             </div>
                         </div>
                         <div class="form-group full-width">
                             <label for="contact-details"><span class="lang-en">Tell us about your project</span><span class="lang-hi" style="display:none;">हमें अपने प्रोजेक्ट के बारे में बताएं</span></label>
                             <textarea id="contact-details" name="project_details" rows="5" required></textarea>
+                        </div>
+                         <!-- NEW: Integrated Referral ID Checker -->
+                        <div class="form-group full-width">
+                            <label for="referral-id-input"><span class="lang-en">Referral ID (Optional)</span><span class="lang-hi" style="display:none;">रेफरल आईडी (वैकल्पिक)</span></label>
+                            <div style="display: flex; gap: 10px; align-items: center;">
+                                <input type="text" id="referral-id-input" placeholder="Enter Referral ID (e.g., PMR-XXXXXX)" style="flex-grow: 1; padding-left: 14px;">
+                                <button type="button" id="check-referral-btn" class="btn" style="padding: 12px 20px; font-size: 0.9rem; flex-shrink: 0; margin: 0;"><span class="lang-en">Verify</span><span class="lang-hi" style="display:none;">जाँच करें</span></button>
+                            </div>
+                            <div id="referral-result-area" style="min-height: 24px; margin-top: 10px; font-weight: 500;"></div>
                         </div>
                     </div>
                     <button type="submit" class="btn" style="width: 100%;"><span class="lang-en">Send Details</span><span class="lang-hi" style="display:none;">विवरण भेजें</span></button>
@@ -371,15 +391,15 @@
                             <div class="form-group">
                                 <label for="review-name-page"><span class="lang-en">Your Name</span><span class="lang-hi" style="display:none;">आपका नाम</span></label>
                                 <div class="input-wrapper">
-                                    <input type="text" id="review-name-page" required>
                                     <i class="fas fa-user input-icon"></i>
+                                    <input type="text" id="review-name-page" required>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="review-location-page"><span class="lang-en">City, State</span><span class="lang-hi" style="display:none;">शहर, राज्य</span></label>
                                 <div class="input-wrapper">
-                                    <input type="text" id="review-location-page" required>
                                     <i class="fas fa-map-marker-alt input-icon"></i>
+                                    <input type="text" id="review-location-page" required>
                                 </div>
                             </div>
                             <div class="form-group full-width">
@@ -708,7 +728,6 @@
     <!-- Modals -->
     <div id="client-modal" class="modal-overlay">
         <div class="modal-content">
-            <canvas class="modal-background-canvas"></canvas>
             <button class="modal-close" data-modal-id="client-modal">&times;</button>
             <div class="modal-body">
                 <div id="client-modal-content" style="width: 100%;"></div>
@@ -717,7 +736,6 @@
     </div>
     <div id="admin-modal" class="modal-overlay">
         <div class="modal-content">
-            <canvas class="modal-background-canvas"></canvas>
             <button class="modal-close" data-modal-id="admin-modal">&times;</button>
             <div class="modal-body">
                 <div id="admin-modal-content" style="width: 100%;"></div>
@@ -726,7 +744,6 @@
     </div>
     <div id="edit-modal" class="modal-overlay">
         <div class="modal-content">
-             <canvas class="modal-background-canvas"></canvas>
             <button class="modal-close" data-modal-id="edit-modal">&times;</button>
             <div class="modal-body">
                  <div class="form-container" style="background-color: transparent; border: none; box-shadow: none; width: 100%;">
@@ -752,13 +769,14 @@
         </div>
     </div>
     
-    <!-- INFO MODAL -->
+    <!-- INFO MODAL (Also used for Digital Card) -->
     <div id="info-modal" class="modal-overlay">
         <div class="modal-content">
-            <canvas class="modal-background-canvas"></canvas>
             <button class="modal-close" data-modal-id="info-modal">&times;</button>
             <div class="modal-body">
-                <div class="page-content" id="info-modal-content" style="width: 100%;"></div>
+                <div id="info-modal-content" style="width: 100%;">
+                    <!-- Content for policy pages OR digital card will be loaded here -->
+                </div>
             </div>
         </div>
     </div>
@@ -784,9 +802,10 @@
         </form>
     </div>
 
-    
+    <!-- External and Local Scripts -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <!-- ===> LINK TO YOUR JAVASCRIPT FILE <=== -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script src="script.js"></script>
+
 </body>
 </html>
