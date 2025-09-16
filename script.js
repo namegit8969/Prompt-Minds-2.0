@@ -753,7 +753,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <h4>Terms & Conditions:</h4>
                 <ol>
                     <li><strong>Joining Fee:</strong>
-                        <p>A one-time, refundable security fee of ₹1000 is required to activate the partnership. This fee is fully refunded after your first successful client referral.</p>
+                        <p>A one-time, Joining is completely free and simple with no risks or hidden issues involved.</p>
                     </li>
                     <li><strong>Commission Structure:</strong>
                         <p>You will earn a <strong>10% commission</strong> on the total project value for every client you refer who signs up for our services.</p>
@@ -1065,3 +1065,4 @@ document.addEventListener('DOMContentLoaded', () => {
     loadReviews();
     loadPartners();
 });
+
