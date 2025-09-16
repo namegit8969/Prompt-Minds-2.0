@@ -327,7 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let profileHTML = `<div class="data-profile" id="profile-to-download"><div class="profile-header"><div class="profile-avatar">${initial}</div><div class="profile-info"><h2>${clientName}</h2><p>Registration ID: ${regId}</p></div></div><div class="profile-body"><div class="fields-grid">`;
         ALL_HEADERS.forEach(header => { const value = data[header]; if (value && value.toString().trim() !== '') { profileHTML += `<div class="field-item"><label>${header}</label><div class="value">${value}</div></div>`; } });
         profileHTML += `</div></div></div>`;
-        const agreementContainerHTML = `<div id="agreement-wrapper"><div class="animated-agreement" id="agreement-to-download"><h2><span class="lang-en">Client Service Agreement</span><span class="lang-hi">क्लाइंट सेवा समझौता</span></h2><div id="agreement-text-content"></div></div><div class="agreement-actions hidden"><button class="btn" id="download-form-btn"><span class="lang-en">Download Form (PNG)</span></button><button class="btn" id="download-agreement-btn"><span class="lang-en">Download Agreement (PDF)</span></button><button class="btn" id="download-all-btn"><span class="lang-en">Download All (PDF)</span></button></div></div>`;
+        const agreementContainerHTML = `<div id="agreement-wrapper"><div class="animated-agreement" id="agreement-to-download"><h2><span class="lang-en">Client Service Agreement</span><span class="lang-hi">क्लाइंट सेवा समझौता</span></h2><div id="agreement-text-content"></div></div><div class="agreement-actions hidden"><button class="btn" id="download-form-btn"><span class="lang-en">Download Form (PNG)</span></button><button class="btn" id="download-agreement-btn"><span class="lang-en">Download Agreement (PNG)</span></button></div></div>`;
         container.innerHTML = profileHTML + agreementContainerHTML;
         container.classList.remove('hidden');
         clientModalContent.querySelector('#user-login-section').classList.add('hidden');
@@ -351,8 +351,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 textElement.innerHTML = fullAgreementText.replace(/\n/g, '<br>');
                 actions.classList.remove('hidden');
                 document.getElementById('download-form-btn').addEventListener('click', () => downloadElementAs('profile-to-download', 'png', `PromptMinds_Form_${regId}`));
-                document.getElementById('download-agreement-btn').addEventListener('click', () => downloadElementAs('agreement-to-download', 'pdf', `PromptMinds_Agreement_${regId}`));
-                document.getElementById('download-all-btn').addEventListener('click', () => downloadCombined(`PromptMinds_Full_Package_${regId}`));
+                document.getElementById('download-agreement-btn').addEventListener('click', () => downloadElementAs('agreement-to-download', 'png', `PromptMinds_Agreement_${regId}`));
             }
         }
         typeWriter();
@@ -361,14 +360,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const { jsPDF } = window.jspdf;
         const element = document.getElementById(elementId);
         if (!element) { console.error("Element to download not found:", elementId); return; }
-        const buttons = document.querySelectorAll('.agreement-actions .btn');
+        
+        // Disable buttons during generation
+        const buttons = document.querySelectorAll('.agreement-actions .btn, .digital-card-actions .btn');
         buttons.forEach(btn => btn.disabled = true);
         
         const originalBg = element.style.backgroundColor;
-        const bgColor = 'var(--bg-secondary)';
-        element.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue(bgColor).trim();
+        let bgColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-secondary').trim();
+        
+        // For downloads, use a solid background if the original is transparent/semi-transparent
+        if (element.classList.contains('id-card-v4-wrapper')) {
+            bgColor = 'white'; // Use white background for card package for better readability
+        }
+        element.style.backgroundColor = bgColor;
 
-        const canvas = await html2canvas(element, { scale: 3, useCORS: true, backgroundColor: getComputedStyle(document.documentElement).getPropertyValue(bgColor).trim() });
+        const canvas = await html2canvas(element, { scale: 3, useCORS: true, backgroundColor: bgColor });
         
         element.style.backgroundColor = originalBg;
 
@@ -376,27 +382,7 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (format === 'pdf') { const imgData = canvas.toDataURL('image/jpeg', 0.95); const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' }); const pdfWidth = pdf.internal.pageSize.getWidth(); const imgProps = pdf.getImageProperties(imgData); const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width; pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST'); pdf.save(`${filename}.pdf`); }
         buttons.forEach(btn => btn.disabled = false);
     }
-    async function downloadCombined(filename) {
-        const { jsPDF } = window.jspdf;
-        const profileEl = document.getElementById('profile-to-download');
-        const agreementEl = document.getElementById('agreement-to-download');
-        const buttons = document.querySelectorAll('.agreement-actions .btn');
-        buttons.forEach(btn => btn.disabled = true);
-        const options = { scale: 3, useCORS: true, backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--bg-secondary').trim() };
-        const profileCanvas = await html2canvas(profileEl, options);
-        const agreementCanvas = await html2canvas(agreementEl, options);
-        const profileImgData = profileCanvas.toDataURL('image/jpeg', 0.95);
-        const agreementImgData = agreementCanvas.toDataURL('image/jpeg', 0.95);
-        const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pageHeight = pdf.internal.pageSize.getHeight();
-        const addImageToPdf = (imgData, position) => { const imgProps = pdf.getImageProperties(imgData); const imgHeight = (imgProps.height * pdfWidth) / imgProps.width; let heightLeft = imgHeight; let tempPosition = 0; while (heightLeft > 0) { if(position + heightLeft > pageHeight) { pdf.addImage(imgData, 'JPEG', 0, -tempPosition, pdfWidth, imgHeight); pdf.addPage(); heightLeft -= (pageHeight - position); tempPosition += (pageHeight - position); position = 0; } else { pdf.addImage(imgData, 'JPEG', 0, position - tempPosition, pdfWidth, imgHeight); position += heightLeft; heightLeft = 0; } } return position; };
-        let currentPosition = addImageToPdf(profileImgData, 0);
-        if (currentPosition > 0) { currentPosition += 5; if(currentPosition >= pageHeight) { pdf.addPage(); currentPosition = 0; } }
-        addImageToPdf(agreementImgData, currentPosition);
-        pdf.save(`${filename}.pdf`);
-        buttons.forEach(btn => btn.disabled = false);
-    }
+    
     async function handleAdminLogin(e) {
         e.preventDefault();
         const form = e.target;
@@ -733,14 +719,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </div>
             <div class="digital-card-actions">
-                <button id="download-card-btn" class="btn">Download Package (PNG)</button>
+                <button id="download-card-only-btn" class="btn">Download Card (PNG)</button>
+                <button id="download-card-package-btn" class="btn">Download Package (PNG)</button>
             </div>`;
 
-        document.getElementById('download-card-btn').addEventListener('click', () => downloadPartnerPackageAsImage(partner));
+        document.getElementById('download-card-only-btn').addEventListener('click', () => downloadElementAs('id-card-v4-wrapper', 'png', `PromptMinds_Card_${partner['Referral ID']}`));
+        document.getElementById('download-card-package-btn').addEventListener('click', () => downloadPartnerPackageAsImage(partner));
         showModal(modal);
     }
 
-    function getAgreementTextAsHTML(partner) {
+    function getPartnerAgreementAsHTML(partner) {
         return `
             <div class="agreement-for-image">
                 <h3>Referral Partnership Agreement</h3>
@@ -750,67 +738,61 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p><strong>Referral ID:</strong> ${partner['Referral ID']}</p>
                     <p><strong>Date Issued:</strong> ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                 </div>
-                <h4>Terms & Conditions:</h4>
-                <ol>
-                    <li><strong>Joining Fee:</strong>
-                        <p>A one-time, Joining is completely free and simple with no risks or hidden issues involved.</p>
-                    </li>
-                    <li><strong>Commission Structure:</strong>
-                        <p>You will earn a <strong>10% commission</strong> on the total project value for every client you refer who signs up for our services.</p>
-                    </li>
-                    <li><strong>Partnership Validity (Lifetime Condition):</strong>
-                        <p>To convert this into a lifetime partnership, you must refer at least <strong>one (1) client within the first 50 days</strong> of joining. If no client is referred within this period, the partnership will be considered inactive, and the ₹1000 security fee will be forfeited and become non-refundable.</p>
-                    </li>
-                    <li><strong>Payment Method:</strong>
-                        <p>Commissions are paid directly via UPI or Bank Transfer within 48 hours of Prompt Minds receiving payment from the client.</p>
-                    </li>
-                    <li><strong>Partner Responsibility:</strong>
-                        <p>Your role is to connect potential clients with Prompt Minds. All project discussions, execution, and client management will be handled entirely by our team.</p>
-                    </li>
+                
+                <h4>1.1 Partner's Role and Responsibility</h4>
+                <p>The Partner's role is solely to introduce new clients to Prompt Minds. After the referral, all client dealings, work delivery, and service management will be handled entirely by the company. The Partner will receive a commission for every successful deal.</p>
+
+                <h4>1.2 Commission Structure and Payment Terms</h4>
+                <p>A fixed commission of <strong>10%</strong> is applicable on the total project value.</p>
+                <p>Client payments are collected in two installments:</p>
+                <ol type="a" style="padding-left: 25px;">
+                    <li><strong>First 50%</strong> - Before starting the project.</li>
+                    <li><strong>Second 50%</strong> - After final delivery or upon completion of the visitor target.</li>
+                </ol>
+                <p>Accordingly, the Partner's commission will also be paid in two parts:</p>
+                <ol type="a" style="padding-left: 25px;">
+                    <li>After the client's first payment → Partner receives the <strong>first 50%</strong> of their commission.</li>
+                    <li>After the client's second payment → Partner receives the <strong>remaining 50%</strong> of their commission.</li>
+                </ol>
+                <p><strong>Example:</strong> If the project value is ₹20,000, the Partner's total commission is ₹2,000.</p>
+                <p style="padding-left: 15px;">- Client pays first 50% (₹10,000) → Partner gets ₹1,000.<br>- Client pays remaining 50% (₹10,000) → Partner gets the final ₹1,000.</p>
+
+                <h4>1.3 Key Conditions</h4>
+                <ol type="a" style="padding-left: 25px;">
+                    <li>The partnership is <strong>completely free</strong>; there is no security fee required.</li>
+                    <li>Commission will only be paid on verified referrals where the client makes a payment.</li>
+                    <li>If a client fails to make the final payment, the Partner's remaining commission will also be put on hold.</li>
+                    <li>Commission payouts are processed via UPI or Bank Transfer within 48 hours of Prompt Minds receiving payment from the client.</li>
                 </ol>
             </div>`;
     }
 
     async function downloadPartnerPackageAsImage(partner) {
-        const downloadBtn = document.getElementById('download-card-btn');
-        if (downloadBtn) { downloadBtn.disabled = true; downloadBtn.innerHTML = 'Generating...'; }
+        const downloadBtn1 = document.getElementById('download-card-only-btn');
+        const downloadBtn2 = document.getElementById('download-card-package-btn');
+        if (downloadBtn1) { downloadBtn1.disabled = true; }
+        if (downloadBtn2) { downloadBtn2.disabled = true; downloadBtn2.innerHTML = 'Generating...'; }
 
-        // Create a temporary container for the combined content
         const packageContainer = document.createElement('div');
         packageContainer.id = 'temp-package-container';
         
-        // Style the container for rendering
         Object.assign(packageContainer.style, {
-            position: 'absolute',
-            left: '-9999px',
-            top: '0',
-            width: '800px', // A good width for high-quality capture
-            padding: '25px',
-            background: 'white',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '20px'
+            position: 'absolute', left: '-9999px', top: '0',
+            width: '800px', padding: '25px', background: 'white',
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px'
         });
         
-        // Get the card and agreement HTML
         const cardHTML = document.querySelector('.id-card-v4-wrapper').outerHTML;
-        const agreementHTML = getAgreementTextAsHTML(partner);
+        const agreementHTML = getPartnerAgreementAsHTML(partner);
 
         packageContainer.innerHTML = cardHTML + agreementHTML;
-        
-        // Temporarily append to the body to render it
         document.body.appendChild(packageContainer);
         
         try {
-            // Use html2canvas to capture the combined container
             const canvas = await html2canvas(packageContainer, {
-                scale: 2, // Higher scale for better quality
-                useCORS: true,
-                backgroundColor: '#ffffff'
+                scale: 2, useCORS: true, backgroundColor: '#ffffff'
             });
             
-            // Trigger download
             const link = document.createElement('a');
             link.download = `PromptMinds_Partner_Package_${partner['Referral ID']}.png`;
             link.href = canvas.toDataURL('image/png');
@@ -820,12 +802,9 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error("Image generation failed:", error);
             alert("Could not generate the image. Please try again.");
         } finally {
-            // Clean up: remove the temporary container
             document.body.removeChild(packageContainer);
-            if (downloadBtn) { 
-                downloadBtn.disabled = false; 
-                downloadBtn.innerHTML = 'Download Package (PNG)';
-            }
+            if (downloadBtn1) { downloadBtn1.disabled = false; }
+            if (downloadBtn2) { downloadBtn2.disabled = false; downloadBtn2.innerHTML = 'Download Package (PNG)'; }
         }
     }
 
@@ -1008,7 +987,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         'terms': {
             en: `<h1>Terms of Service for Prompt Minds</h1><p><em>Last Updated: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</em></p><h2>1. Acceptance of Terms</h2><p>By using the services of Prompt Minds ("Company," "we," "us," or "our"), you (the "Client," "you," or "your") agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, please do not use our services. These Terms constitute a legally binding agreement between you and Prompt Minds regarding your access to and use of our website development and related services.</p><h2>2. Services Provided</h2><p>Prompt Minds agrees to provide the Client with professional website design and development services. The scope of services is detailed in the "Website Design Service Agreement" section of our website and includes, but is not limited to:</p><ul><li>Custom website design on the Blogger platform.</li><li>Registration and setup of a .com custom domain name.</li><li>Development of custom tools and features as agreed upon.</li><li>Creation of custom graphics and animations.</li><li>Comprehensive Search Engine Optimization (SEO) setup.</li><li>Verification with Google Search Console.</li><li>Custom logo design.</li><li>Assistance in applying for ad platforms like Google AdSense.</li></ul><h2>3. Client Responsibilities</h2><p>To ensure a smooth and timely project delivery, the Client agrees to:</p><ul><li>Provide all necessary website content (text, images, brand details) in a timely manner.</li><li>Ensure that all content provided is original or that the Client holds the legal rights and copyright to use it. The Client indemnifies Prompt Minds against any claims of copyright infringement arising from the content provided by the Client.</li><li>Provide timely feedback and approvals as required during the project lifecycle.</li><li>Communicate any changes or new requirements clearly and promptly.</li></ul><h2>4. Payment Terms</h2><p>Our payment structure is designed to be result-oriented:</p><ul><li>An advance payment of 50% of the total project cost is required to commence work. This payment is non-refundable once the project has started.</li><li>The final 50% payment is due upon whichever of two conditions is met first: (a) when the website has received at least 500 visitors, or (b) two months after the project start date.</li><li>All payments are to be made through the methods specified by Prompt Minds. Failure to make payments on time may result in work stoppage or suspension of services.</li></ul><h2>5. Intellectual Property and Ownership</h2><p>Upon receipt of full and final payment, the Client will be the sole owner of the website, domain name, and all associated deliverables. All rights, title, and interest will be transferred to the Client. Prompt Minds reserves the right to display the completed project in our portfolio and marketing materials as an example of our work. This serves as a promotion for both our services and the Client's website.</p><h2>6. Term and Termination</h2><ul><li><strong>Cancellation by Client:</strong> If the Client chooses to cancel the project after work has begun, the 50% advance payment will be forfeited to cover the costs of the domain, resources, and initial work performed.</li><li><strong>Termination by Prompt Minds:</strong> We reserve the right to terminate the project if the Client fails to adhere to these terms, including failure to provide necessary content or payments.</li><li><strong>Refunds:</strong> If Prompt Minds fails to deliver the project within the agreed-upon timeline (typically 7 working days, subject to the Client providing content on time), the Client is entitled to a full refund of the advance payment.</li></ul><h2>7. Disclaimer of Warranties and Limitation of Liability</h2><p>While we strive for excellence, our services are provided on an "as is" basis. We do not warrant that your website will be error-free or that access to it will be continuous or uninterrupted. We do not guarantee approval for ad platforms like Google AdSense, as this is at the sole discretion of the respective platform. In no event shall Prompt Minds be liable for any direct, indirect, incidental, or consequential damages resulting from the use or inability to use our services.</p><h2>8. Governing Law</h2><p>These Terms shall be governed by and construed in accordance with the laws of India, without regard to its conflict of law principles. Any dispute arising under or in connection with these Terms shall be subject to the exclusive jurisdiction of the courts located in Patna, Bihar, India.</p><h2>9. Contact Us</h2><p>For any questions or clarifications regarding these Terms of Service, please contact us at <a href="mailto:business.newviral@gmail.com">business.newviral@gmail.com</a>.</p>`,
-            hi: `<h1>प्रॉम्प्ट माइंड्स के लिए सेवा की शर्तें</h1><p><em>अंतिम अपडेट: ${new Date().toLocaleDateString('hi-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</em></p><h2>1. शर्तों की स्वीकृति</h2><p>प्रॉम्प्ट माइंड्स ("कंपनी," "हम," "हमें," या "हमारा") की सेवाओं का उपयोग करके, आप ("क्लाइंट," "आप," या "आपका") इन सेवा की शर्तों ("शर्तें") से बंधे होने के लिए सहमत हैं। यदि आप इन शर्तों से सहमत नहीं हैं, तो कृपया हमारी सेवाओं का उपयोग न करें। ये शर्तें आपके और प्रॉम्प्ट माइंड्स के बीच हमारी वेबसाइट विकास और संबंधित सेवाओं तक आपकी पहुंच और उपयोग के संबंध में कानूनी रूप से बाध्यकारी समझौता हैं।</p><h2>2. प्रदान की जाने वाली सेवाएँ</h2><p>प्रॉम्प्ट माइंड्स क्लाइंट को पेशेवर वेबसाइट डिजाइन और विकास सेवाएँ प्रदान करने के लिए सहमत है। सेवाओं का दायरा हमारी वेबसाइट के "वेबसाइट डिज़ाइन सेवा समझौता" खंड में विस्तृत है और इसमें शामिल हैं, लेकिन यह इन्हीं तक सीमित नहीं है:</p><ul><li>ब्लॉगर प्लेटफॉर्म पर कस्टम वेबसाइट डिजाइन।</li><li>.com कस्टम डोमेन नाम का पंजीकरण और सेटअप।</li><li>सहमति के अनुसार कस्टम टूल और सुविधाओं का विकास।</li><li>कस्टम ग्राफिक्स और एनिमेशन का निर्माण।</li><li>व्यापक खोज इंजन अनुकूलन (एसईओ) सेटअप।</li><li>गूगल सर्च कंसोल के साथ सत्यापन।</li><li>कस्टम लोगो डिजाइन।</li><li>गूगल एडसेंस जैसे विज्ञापन प्लेटफार्मों के लिए आवेदन करने में सहायता।</li></ul><h2>3. क्लाइंट की जिम्मेदारियाँ</h2><p>एक सहज और समय पर प्रोजेक्ट डिलीवरी सुनिश्चित करने के लिए, क्लाइंट सहमत है:</p><ul><li>सभी आवश्यक वेबसाइट सामग्री (टेक्स्ट, चित्र, ब्रांड विवरण) समय पर प्रदान करना।</li><li>यह सुनिश्चित करना कि प्रदान की गई सभी सामग्री मूल है या क्लाइंट के पास इसका उपयोग करने का कानूनी अधिकार और कॉपीराइट है। क्लाइंट द्वारा प्रदान की गई सामग्री से उत्पन्न होने वाले किसी भी कॉपीराइट उल्लंघन के दावों के खिलाफ क्लाइंट प्रॉम्प्ट माइंड्स को क्षतिपूर्ति करता है।</li><li>प्रोजेक्ट जीवनचक्र के दौरान आवश्यकतानुसार समय पर प्रतिक्रिया और अनुमोदन प्रदान करना।</li><li>किसी भी परिवर्तन या नई आवश्यकताओं को स्पष्ट और तुरंत सूचित करना।</li></ul><h2>4. भुगतान की शर्तें</h2><p>हमारी भुगतान संरचना परिणाम-उन्मुख होने के लिए डिज़ाइन की गई है:</p><ul><li>काम शुरू करने के लिए कुल प्रोजेक्ट लागत का 50% अग्रिम भुगतान आवश्यक है। प्रोजेक्ट शुरू होने के बाद यह भुगतान गैर-वापसी योग्य है।</li><li>अंतिम 50% भुगतान दो शर्तों में से जो भी पहले हो, पर देय है: (क) जब वेबसाइट पर कम से कम 500 विज़िटर आ गए हों, या (ख) प्रोजेक्ट शुरू होने की तारीख से दो महीने बाद।</li><li>सभी भुगतान प्रॉम्प्ट माइंड्स द्वारा निर्दिष्ट तरीकों के माध्यम से किए जाने हैं। समय पर भुगतान करने में विफलता के परिणामस्वरूप काम रुक सकता है या सेवाएँ निलंबित हो सकती हैं।</li></ul><h2>5. बौद्धिक संपदा और स्वामित्व</h2><p>पूर्ण और अंतिम भुगतान प्राप्त होने पर, क्लाइंट वेबसाइट, डोमेन नाम और सभी संबंधित डिलिवरेबल्स का एकमात्र मालिक होगा। सभी अधिकार, शीर्षक और हित क्लाइंट को हस्तांतरित कर दिए जाएंगे। प्रॉम्प्ट माइंड्स हमारे काम के एक उदाहरण के रूप में हमारे पोर्टफोलियो और विपणन सामग्री में पूर्ण प्रोजेक्ट को प्रदर्शित करने का अधिकार सुरक्षित रखता है। यह हमारी सेवाओं और क्लाइंट की वेबसाइट दोनों के प्रचार के रूप में कार्य करता है।</p><h2>6. अवधि और समाप्ति</h2><ul><li><strong>क्लाइंट द्वारा रद्दीकरण:</strong> यदि क्लाइंट काम शुरू होने के बाद प्रोजेक्ट को रद्द करने का विकल्प चुनता है, तो डोमेन, संसाधनों और किए गए प्रारंभिक कार्य की लागत को कवर करने के लिए 50% अग्रिम भुगतान जब्त कर लिया जाएगा।</li><li><strong>प्रॉम्प्ट माइंड्स द्वारा समाप्ति:</strong> यदि क्लाइंट इन शर्तों का पालन करने में विफल रहता है, जिसमें आवश्यक सामग्री या भुगतान प्रदान करने में विफलता शामिल है, तो हम प्रोजेक्ट को समाप्त करने का अधिकार सुरक्षित रखते हैं।</li><li><strong>धनवापसी:</strong> यदि प्रॉम्प्ट माइंड्स सहमत समय-सीमा (आमतौर पर 7 कार्य दिवस, क्लाइंट द्वारा समय पर सामग्री प्रदान करने के अधीन) के भीतर प्रोजेक्ट देने में विफल रहता है, तो क्लाइंट अग्रिम भुगतान की पूरी वापसी का हकदार है।</li></ul><h2>7. वारंटियों का अस्वीकरण और देयता की सीमा</h2><p>जबकि हम उत्कृष्टता के लिए प्रयास करते हैं, हमारी सेवाएँ "जैसा है" के आधार पर प्रदान की जाती हैं। हम यह गारंटी नहीं देते कि आपकी वेबसाइट त्रुटि-मुक्त होगी या उस तक पहुंच निरंतर या निर्बाध होगी। हम गूगल एडसेंस जैसे विज्ञापन प्लेटफार्मों के लिए अनुमोदन की गारंटी नहीं दे सकते, क्योंकि यह संबंधित प्लेटफॉर्म के एकमात्र विवेक पर है। किसी भी स्थिति में प्रॉम्प्ट माइंड्स हमारी सेवाओं का उपयोग करने या उपयोग करने में असमर्थता के परिणामस्वरूप होने वाले किसी भी प्रत्यक्ष, अप्रत्यक्ष, आकस्मिक, या परिणामी नुकसान के लिए उत्तरदायी नहीं होगा।</p></ul><h2>8. शासी कानून</h2><p>ये शर्तें भारत के कानूनों के अनुसार शासित और व्याख्या की जाएंगी, इसके कानून के सिद्धांतों के टकराव की परवाह किए बिना। इन शर्तों के तहत या इसके संबंध में उत्पन्न होने वाले किसी भी विवाद को पटना, बिहार, भारत में स्थित अदालतों के अनष्य क्षेत्राधिकार के अधीन किया जाएगा।</p><h2>9. हमसे संपर्क करें</h2><p>इन सेवा की शर्तों के संबंध में किसी भी प्रश्न या स्पष्टीकरण के लिए, कृपया हमसे <a href="mailto:business.newviral@gmail.com">business.newviral@gmail.com</a> पर संपर्क करें।</p>`
+            hi: `<h1>प्रॉम्प्ट माइंड्स के लिए सेवा की शर्तें</h1><p><em>अंतिम अपडेट: ${new Date().toLocaleDateString('hi-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</em></p><h2>1. शर्तों की स्वीकृति</h2><p>प्रॉम्प्ट माइंड्स ("कंपनी," "हम," "हमें," या "हमारा") की सेवाओं का उपयोग करके, आप ("क्लाइंट," "आप," या "आपका") इन सेवा की शर्तों ("शर्तें") से बंधे होने के लिए सहमत हैं। यदि आप इन शर्तों से सहमत नहीं हैं, तो कृपया हमारी सेवाओं का उपयोग न करें। ये शर्तें आपके और प्रॉम्प्ट माइंड्स के बीच हमारी वेबसाइट विकास और संबंधित सेवाओं तक आपकी पहुंच और उपयोग के संबंध में कानूनी रूप से बाध्यकारी समझौता हैं।</p><h2>2. प्रदान की जाने वाली सेवाएँ</h2><p>प्रॉम्प्ट माइंड्स क्लाइंट को पेशेवर वेबसाइट डिजाइन और विकास सेवाएँ प्रदान करने के लिए सहमत है। सेवाओं का दायरा हमारी वेबसाइट के "वेबसाइट डिज़ाइन सेवा समझौता" खंड में विस्तृत है और इसमें शामिल हैं, लेकिन यह इन्हीं तक सीमित नहीं है:</p><ul><li>ब्लॉगर प्लेटफॉर्म पर कस्टम वेबसाइट डिजाइन।</li><li>.com कस्टम डोमेन नाम का पंजीकरण और सेटअप।</li><li>सहमति के अनुसार कस्टम टूल और सुविधाओं का विकास।</li><li>कस्टम ग्राफिक्स और एनिमेशन का निर्माण।</li><li>व्यापक खोज इंजन अनुकूलन (एसईओ) सेटअप।</li><li>गूगल सर्च कंसोल के साथ सत्यापन।</li><li>कस्टम लोगो डिजाइन।</li><li>गूगल एडसेंस जैसे विज्ञापन प्लेटफार्मों के लिए आवेदन करने में सहायता।</li></ul><h2>3. क्लाइंट की जिम्मेदारियाँ</h2><p>एक सहज और समय पर प्रोजेक्ट डिलीवरी सुनिश्चित करने के लिए, क्लाइंट सहमत है:</p><ul><li>सभी आवश्यक वेबसाइट सामग्री (टेक्स्ट, चित्र, ब्रांड विवरण) समय पर प्रदान करना।</li><li>यह सुनिश्चित करना कि प्रदान की गई सभी सामग्री मूल है या क्लाइंट के पास इसका उपयोग करने का कानूनी अधिकार और कॉपीराइट है। क्लाइंट द्वारा प्रदान की गई सामग्री से उत्पन्न होने वाले किसी भी कॉपीराइट उल्लंघन के दावों के खिलाफ क्लाइंट प्रॉम्प्ट माइंड्स को क्षतिपूर्ति करता है।</li><li>प्रोजेक्ट जीवनचक्र के दौरान आवश्यकतानुसार समय पर प्रतिक्रिया और अनुमोदन प्रदान करना।</li><li>किसी भी परिवर्तन या नई आवश्यकताओं को स्पष्ट और तुरंत सूचित करना।</li></ul><h2>4. भुगतान की शर्तें</h2><p>हमारी भुगतान संरचना परिणाम-उन्मुख होने के लिए डिज़ाइन की गई है:</p><ul><li>काम शुरू करने के लिए कुल प्रोजेक्ट लागत का 50% अग्रिम भुगतान आवश्यक है। प्रोजेक्ट शुरू होने के बाद यह भुगतान गैर-वापसी योग्य है।</li><li>अंतिम 50% भुगतान दो शर्तों में से जो भी पहले हो, पर देय है: (क) जब वेबसाइट पर कम से कम 500 विज़िटर आ गए हों, या (ख) प्रोजेक्ट शुरू होने की तारीख से दो महीने बाद।</li><li>सभी भुगतान प्रॉम्प्ट माइंड्स द्वारा निर्दिष्ट तरीकों के माध्यम से किए जाने हैं। समय पर भुगतान करने में विफलता के परिणामस्वरूप काम रुक सकता है या सेवाएँ निलंबित हो सकती हैं।</li></ul><h2>5. बौद्धिक संपदा और स्वामित्व</h2><p>पूर्ण और अंतिम भुगतान प्राप्त होने पर, क्लाइंट वेबसाइट, डोमेन नाम और सभी संबंधित डिलिवरेबल्स का एकमात्र मालिक होगा। सभी अधिकार, शीर्षक और हित क्लाइंट को हस्तांतरित कर दिए जाएंगे। प्रॉम्प्ट माइंड्स हमारे काम के एक उदाहरण के रूप में हमारे पोर्टफोलियो और विपणन सामग्री में पूर्ण प्रोजेक्ट को प्रदर्शित करने का अधिकार सुरक्षित रखता है। यह हमारी सेवाओं और क्लाइंट की वेबसाइट दोनों के प्रचार के रूप में कार्य करता है।</p><h2>6. अवधि और समाप्ति</h2><ul><li><strong>क्लाइंट द्वारा रद्दीकरण:</strong> यदि क्लाइंट काम शुरू होने के बाद प्रोजेक्ट को रद्द करने का विकल्प चुनता है, तो डोमेन, संसाधनों और किए गए प्रारंभिक कार्य की लागत को कवर करने के लिए 50% अग्रिम भुगतान जब्त कर लिया जाएगा।</li><li><strong>प्रॉम्प्ट माइंड्स द्वारा समाप्ति:</strong> यदि क्लाइंट इन शर्तों का पालन करने में विफल रहता है, जिसमें आवश्यक सामग्री या भुगतान प्रदान करने में विफलता शामिल है, तो हम प्रोजेक्ट को समाप्त करने का अधिकार सुरक्षित रखते हैं।</li><li><strong>धनवापसी:</strong> यदि प्रॉम्प्ट माइंड्स सहमत समय-सीमा (आमतौर पर 7 कार्य दिवस, क्लाइंट द्वारा समय पर सामग्री प्रदान करने के अधीन) के भीतर प्रोजेक्ट देने में विफल रहता है, तो क्लाइंट अग्रिम भुगतान की पूरी वापसी का हकदार है।</li></ul><h2>7. वारंटियों का अस्वीकरण और देयता की सीमा</h2><p>जबकि हम उत्कृष्टता के लिए प्रयास करते हैं, हमारी सेवाएँ "जैसा है" के आधार पर प्रदान की जाती हैं। हम यह गारंटी नहीं देते कि आपकी वेबसाइट त्रुटि-मुक्त होगी या उस तक पहुंच निरंतर या निर्बाध होगी। हम गूगल एडसेंस जैसे विज्ञापन प्लेटफार्मों के लिए अनुमोदन की गारंटी नहीं दे सकते, क्योंकि यह संबंधित प्लेटफॉर्म के एकमात्र विवेक पर है। किसी भी स्थिति में प्रॉम्प्ट माइंड्स हमारी सेवाओं का उपयोग करने या उपयोग करने में असमर्थता के परिणामस्वरूप होने वाले किसी भी प्रत्यक्ष, अप्रत्यक्ष, आकमिक, या परिणामी नुकसान के लिए उत्तरदायी नहीं होगा।</p></ul><h2>8. शासी कानून</h2><p>ये शर्तें भारत के कानूनों के अनुसार शासित और व्याख्या की जाएंगी, इसके कानून के सिद्धांतों के टकराव की परवाह किए बिना। इन शर्तों के तहत या इसके संबंध में उत्पन्न होने वाले किसी भी विवाद को पटना, बिहार, भारत में स्थित अदालतों के अनष्य क्षेत्राधिकार के अधीन किया जाएगा।</p><h2>9. हमसे संपर्क करें</h2><p>इन सेवा की शर्तों के संबंध में किसी भी प्रश्न या स्पष्टीकरण के लिए, कृपया हमसे <a href="mailto:business.newviral@gmail.com">business.newviral@gmail.com</a> पर संपर्क करें।</p>`
         }
     };
     function loadPageContent(pageName, containerId) {
@@ -1065,4 +1044,3 @@ document.addEventListener('DOMContentLoaded', () => {
     loadReviews();
     loadPartners();
 });
-
